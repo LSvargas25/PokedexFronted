@@ -1,0 +1,104 @@
+/* Contenedor principal de la pantalla */
+.screen {
+  width: 380px;           /* ancho fijo para la pantalla */
+  height: 340px;          /* alto fijo */
+  border-radius: 10px;
+  top: 48%;
+  left: 36%;
+  transform: translate(-50%, -50%); /* centra la pantalla */
+  border: 2px solid white;
+  position: absolute;
+  z-index: 999;
+  overflow: hidden;       /* evita que el contenido se salga */
+  background-color: #001010; /* color base */
+}
+
+/* Pantalla apagada */
+.screen-off {
+  width: 100%;
+  height: 100%;
+  background-color: #001010;
+}
+
+/* Pantalla de bienvenida */
+.welcome-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Imagen de fondo de bienvenida */
+.welcome-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* cubre todo el contenedor sin cortarse */
+  opacity: 0.7;
+  z-index: 1;
+}
+
+/* Texto de bienvenida */
+.welcome-text {
+  position: relative;
+  z-index: 2; /* encima de la imagen */
+  width: 100%;
+  text-align: center;
+  color: white;
+}
+
+/* Menú de opciones */
+.menu-options {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* botones en columna */
+  background-color: #00ffff; /* solo para el menú */
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+/* Botones de menú */
+.option-btn {
+  margin: 5px;
+  padding: 8px 15px;
+  background-color: #004040;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Botones de control (encendido/apagado) */
+.rectangle1,
+.rectangle2 {
+  border-radius: 50px;
+  width: 60px;
+  height: 10px;
+  border: 2px solid white;
+  position: absolute;
+  z-index: 999;
+  cursor: pointer;
+  display: flex;
+  top: 740px;
+}
+
+/* Botón rojo (apagar) */
+.rectangle2 {
+  background-color: rgb(222, 9, 47);
+  left: 600px;
+}
+
+/* Botón azul (encender) */
+.rectangle1 {
+  background-color: #0d780d;
+  left: 680px;
+}

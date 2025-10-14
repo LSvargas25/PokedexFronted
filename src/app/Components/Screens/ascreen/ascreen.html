@@ -1,0 +1,30 @@
+
+
+
+
+<!-- screen principal -->
+<div class="screen">
+  <div *ngIf="!isOn" class="screen-off"></div>
+
+  <div *ngIf="isOn">
+    <div *ngIf="showWelcome" class="welcome-screen">
+      <img src="assets/images/welcome-bg.jpg" alt="background" class="welcome-bg" />
+      <div class="welcome-text">
+        <h2>"Welcome back to the pokemon dex "</h2>
+        <p>Realized by Luis Steven Vargas — © 2025</p>
+      </div>
+    </div>
+
+    <div *ngIf="!showWelcome" class="menu-options">
+      <button *ngFor="let option of options" class="option-btn">
+        {{ option }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Red and blue Buttons -->
+<div class="controls">
+  <button class="rectangle1" (click)="powerOn()"></button>
+  <button class="rectangle2" (click)="powerOff()"></button>
+</div>
