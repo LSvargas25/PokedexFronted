@@ -1,30 +1,45 @@
-
-
-
-
-<!-- screen principal -->
 <div class="screen">
   <div *ngIf="!isOn" class="screen-off"></div>
 
-  <div *ngIf="isOn">
-    <div *ngIf="showWelcome" class="welcome-screen">
-      <img src="assets/images/welcome-bg.jpg" alt="background" class="welcome-bg" />
-      <div class="welcome-text">
-        <h2>"Welcome back to the pokemon dex "</h2>
-        <p>Realized by Luis Steven Vargas — © 2025</p>
-      </div>
+  <div *ngIf="isOn" class="welcome-screen">
+    <video
+      #videoPlayer
+      [src]="currentVideo"
+      autoplay
+      [loop]="showMenu"
+      [class.intro]="!showMenu"
+      [class.menu]="showMenu"
+      (ended)="onVideoEnded()"
+      disablepictureinpicture
+    ></video>
+     <!-- 🎧 Control de volumen con emojis -->
+    <div *ngIf="showMenu" class="volume-control">
+      <button class="volume-btn" (click)="toggleMute()">
+        <span class="volume-icon">{{ volumeIcon }}</span>
+      </button>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        [(ngModel)]="volume"
+        (input)="changeVolume()"
+      />
     </div>
 
-    <div *ngIf="!showWelcome" class="menu-options">
-      <button *ngFor="let option of options" class="option-btn">
+    <div *ngIf="showMenu" class="menu-options">
+      <button
+        *ngFor="let option of options"
+        class="option-btn"
+        (click)="onOptionClick(option)"
+      >
         {{ option }}
       </button>
     </div>
   </div>
 </div>
 
-<!-- Red and blue Buttons -->
 <div class="controls">
-  <button class="rectangle1" (click)="powerOn()"></button>
-  <button class="rectangle2" (click)="powerOff()"></button>
+  <button class="rectangle1" (click)="powerOn()">ON</button>
+  <button class="rectangle2" (click)="powerOff()">OFF</button>
 </div>

@@ -1,16 +1,15 @@
 /* Contenedor principal de la pantalla */
 .screen {
-  width: 380px;           /* ancho fijo para la pantalla */
-  height: 340px;          /* alto fijo */
+  width: 360px;
+  height: 340px;
   border-radius: 10px;
-  top: 48%;
-  left: 36%;
-  transform: translate(-50%, -50%); /* centra la pantalla */
-  border: 2px solid white;
   position: absolute;
-  z-index: 999;
-  overflow: hidden;       /* evita que el contenido se salga */
-  background-color: #001010; /* color base */
+  top: 70px;
+  left: 50px;
+  border: 2px solid white;
+  overflow: hidden;
+  z-index: 950;
+  background: black;
 }
 
 /* Pantalla apagada */
@@ -20,35 +19,32 @@
   background-color: #001010;
 }
 
-/* Pantalla de bienvenida */
-.welcome-screen {
-  position: relative;
+/* Video intro */
+.welcome-screen video.intro {
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 280px;
+  object-fit: fill;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  z-index: 999;
+  border-radius: 20px;
+  background-color: black;
+  transform: scale(1) translate(-5px, -10px);
+  transform-origin: center;
 }
 
-/* Imagen de fondo de bienvenida */
-.welcome-bg {
+/* Video de menú (loop) */
+.welcome-screen video.menu {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* cubre todo el contenedor sin cortarse */
-  opacity: 0.7;
   z-index: 1;
-}
-
-/* Texto de bienvenida */
-.welcome-text {
-  position: relative;
-  z-index: 2; /* encima de la imagen */
-  width: 100%;
-  text-align: center;
-  color: white;
+  transform: scale(1) translate(0px, 0px);
+  transform-origin: center;
 }
 
 /* Menú de opciones */
@@ -59,13 +55,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* botones en columna */
-  background-color: #00ffff; /* solo para el menú */
-  box-sizing: border-box;
+  flex-direction: column;
   z-index: 2;
+  padding: 10px;
 }
 
-/* Botones de menú */
+/* Botones del menú */
 .option-btn {
   margin: 5px;
   padding: 8px 15px;
@@ -80,25 +75,92 @@
 /* Botones de control (encendido/apagado) */
 .rectangle1,
 .rectangle2 {
-  border-radius: 50px;
   width: 60px;
-  height: 10px;
+  height: 20px;
+  font-size: medium;
+  font-family: cursive;
   border: 2px solid white;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   z-index: 999;
   cursor: pointer;
-  display: flex;
-  top: 740px;
+  top: 530px;
 }
 
 /* Botón rojo (apagar) */
 .rectangle2 {
   background-color: rgb(222, 9, 47);
-  left: 600px;
+  left: 140px;
+  color: white;
 }
 
 /* Botón azul (encender) */
 .rectangle1 {
   background-color: #0d780d;
-  left: 680px;
+  left: 230px;
+  color: white;
+}
+
+/* Transiciones */
+.welcome-text,
+.menu-options {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.volume-control {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 25px;
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.volume-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.volume-btn:hover {
+  transform: scale(1.2);
+}
+
+.volume-icon {
+  display: inline-block;
+  font-size: 24px;
+  color: white;
+  user-select: none;
+}
+
+/* 🔁 Animación del ícono */
+@keyframes bounceAnim {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4); }
+  60% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.bounce {
+  animation: bounceAnim 0.3s ease;
+}
+
+.volume-control input[type="range"] {
+  width: 80px;
+  cursor: pointer;
+  accent-color: #ffcb05;
+  filter: drop-shadow(0 0 3px #ffcb05);
 }

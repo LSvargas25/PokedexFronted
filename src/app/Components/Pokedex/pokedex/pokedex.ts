@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AScreen } from '../../Screens/ascreen/ascreen';
 
 @Component({
   selector: 'app-pokedex',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, AScreen],
   templateUrl: './pokedex.html',
-  styleUrl: './pokedex.scss'
+  styleUrls: ['./pokedex.scss']
 })
-export class Pokedex {
-
-}
+export class Pokedex {}
