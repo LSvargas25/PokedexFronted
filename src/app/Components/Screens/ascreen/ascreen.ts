@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScreenService } from '../../../Services/screen-service';
 
 @Component({
   selector: 'app-ascreen',
@@ -23,6 +24,14 @@ export class AScreen implements AfterViewInit {
   isMuted: boolean = false;
   volumeIcon: string = '🔉'; // icono inicial
 
+  constructor(private screenService: ScreenService) {
+    this.screenService.screenState$.subscribe(state => {
+      this.isOn = state;
+      if (this.isOn) this.startScreen();
+      else this.stopScreen();
+    });
+  }
+
   ngAfterViewInit() {
     this.playVideo();
     if (this.videoPlayer) {
@@ -31,15 +40,13 @@ export class AScreen implements AfterViewInit {
     this.updateVolumeIcon();
   }
 
-  powerOn() {
-    this.isOn = true;
+  startScreen() {
     this.showMenu = false;
     this.currentVideo = 'assets/videos/intro.mp4';
     setTimeout(() => this.playVideo(), 0);
   }
 
-  powerOff() {
-    this.isOn = false;
+  stopScreen() {
     this.showMenu = false;
   }
 

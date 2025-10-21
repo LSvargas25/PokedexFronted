@@ -353,3 +353,36 @@ left: 100px;
 .gs2{
   left: 310px;
 }
+
+/* Botones de control (encendido/apagado) */
+.rectangle1,
+.rectangle2 {
+  width: 60px;
+  height: 20px;
+  font-size: medium;
+  font-family: cursive;
+  border: 2px solid white;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 999;
+  cursor: pointer;
+  top: 630px;
+
+}
+
+/* Botón rojo (apagar) */
+.rectangle2 {
+  background-color: rgb(222, 9, 47);
+  left: -430px;
+  color: white;
+}
+
+/* Botón azul (encender) */
+.rectangle1 {
+  background-color: #0d780d;
+  left: -350px;
+  color: white;
+}
