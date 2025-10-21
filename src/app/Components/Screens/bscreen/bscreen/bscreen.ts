@@ -1,11 +1,14 @@
 import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ScreenService } from '../../../../Services/screen-service';
+import { PokefronService } from '../../../../Services/Options/Poked/pokefron-service';
 import { gsap } from 'gsap';
+import { PokedSecondWindow } from "../../../Options/Poked/poked/pokedSecondWindow/poked-second-window/poked-second-window";
 
 @Component({
   selector: 'app-bscreen',
   templateUrl: './bscreen.html',
-  styleUrls: ['./bscreen.scss']
+  styleUrls: ['./bscreen.scss'],
+  imports: [PokedSecondWindow]
 })
 export class Bscreen implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -13,17 +16,26 @@ export class Bscreen implements AfterViewInit {
 
   isOn = false;
   currentVideo = 'assets/videos/pokevid.mp4';
+  currentBComponent: string | null = null;
 
-  constructor(private screenService: ScreenService, private cd: ChangeDetectorRef) {
+  constructor(
+    private screenService: ScreenService,
+    private cd: ChangeDetectorRef,
+    private pokefronService: PokefronService
+  ) {
+    // Suscribirse al estado de la pantalla
     this.screenService.screenState$.subscribe(state => {
       this.isOn = state;
-      this.cd.detectChanges(); // Asegura que Angular actualice el DOM
+      this.cd.detectChanges();
 
-      if (this.isOn) {
-        this.startScreen();   // Encender pantalla
-      } else {
-        this.offScreen();     // Apagar pantalla
-      }
+      if (this.isOn) this.startScreen();
+      else this.offScreen();
+    });
+
+    // Suscribirse a screenB$ para cargar componentes dinámicamente
+    this.pokefronService.screenB$.subscribe(component => {
+      this.currentBComponent = component;
+      this.cd.detectChanges(); // actualiza el DOM
     });
   }
 
@@ -32,7 +44,7 @@ export class Bscreen implements AfterViewInit {
   /** Pantalla encendida */
   startScreen() {
     this.currentVideo = 'assets/videos/pokevid.mp4';
-    this.pokeSplit.nativeElement.style.display = 'flex'; // aseguramos que se muestre antes de animar
+    if (this.pokeSplit) this.pokeSplit.nativeElement.style.display = 'flex';
     setTimeout(() => this.animatePoke(), 50);
   }
 
@@ -40,24 +52,23 @@ export class Bscreen implements AfterViewInit {
   offScreen() {
     if (this.videoPlayer) {
       const video = this.videoPlayer.nativeElement;
-      video.pause(); // detenemos la reproducción
-      video.currentTime = 0; // reiniciamos a inicio
+      video.pause();
+      video.currentTime = 0;
     }
 
-    // Mostramos nuevamente la imagen
-    const pokeSplitEl = this.pokeSplit.nativeElement;
-    pokeSplitEl.style.display = 'flex';
-
-    // Reseteamos posición de las mitades
-    const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
-    const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
-
-    gsap.set(top, { y: '0%' });
-    gsap.set(bottom, { y: '0%' });
+    if (this.pokeSplit) {
+      const pokeSplitEl = this.pokeSplit.nativeElement;
+      pokeSplitEl.style.display = 'flex';
+      const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
+      const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
+      gsap.set(top, { y: '0%' });
+      gsap.set(bottom, { y: '0%' });
+    }
   }
 
   /** Animación de apertura */
   private animatePoke() {
+    if (!this.pokeSplit) return;
     const pokeSplitEl = this.pokeSplit.nativeElement;
     const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
     const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
@@ -86,14 +97,14 @@ export class Bscreen implements AfterViewInit {
     let forward = true;
     const speed = 1;
 
-    // Eliminamos posibles escuchas previas
+    // Eliminamos escuchas previas
     video.removeEventListener('timeupdate', (video as any)._reverseHandler);
 
     const handler = () => {
       if (forward) {
         if (video.currentTime >= video.duration - 0.1) forward = false;
       } else {
-        video.currentTime -= 0.05 * speed; // velocidad de retroceso
+        video.currentTime -= 0.05 * speed;
         if (video.currentTime <= 0.1) forward = true;
       }
     };

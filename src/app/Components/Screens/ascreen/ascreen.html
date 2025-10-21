@@ -1,7 +1,10 @@
 <div class="screen">
+  <!-- Pantalla apagada -->
   <div *ngIf="!isOn" class="screen-off"></div>
 
+  <!-- Pantalla encendida -->
   <div *ngIf="isOn" class="welcome-screen">
+    <!-- Video de fondo -->
     <video
       #videoPlayer
       [src]="currentVideo"
@@ -12,7 +15,8 @@
       (ended)="onVideoEnded()"
       disablepictureinpicture
     ></video>
-     <!-- 🎧 Control de volumen con emojis -->
+
+    <!-- Control de volumen -->
     <div *ngIf="showMenu" class="volume-control">
       <button class="volume-btn" (click)="toggleMute()">
         <span class="volume-icon">{{ volumeIcon }}</span>
@@ -27,6 +31,7 @@
       />
     </div>
 
+    <!-- Menú principal -->
     <div *ngIf="showMenu" class="menu-options">
       <button
         *ngFor="let option of options"
@@ -36,6 +41,24 @@
         {{ option }}
       </button>
     </div>
+
+    <!-- Carga dinámica de componentes -->
+    <div class="dynamic-component">
+      <ng-container *ngIf="currentComponent === 'Poked'">
+        <app-poked></app-poked>
+      </ng-container>
+      <ng-container *ngIf="currentComponent === 'Pokémon Search'">
+        <app-pokemon-search></app-pokemon-search>
+      </ng-container>
+      <ng-container *ngIf="currentComponent === 'Trainer Info'">
+        <app-trainer-info></app-trainer-info>
+      </ng-container>
+      <ng-container *ngIf="currentComponent === 'Settings'">
+        <app-settings></app-settings>
+      </ng-container>
+
+      <!-- Botón de Back -->
+      <button *ngIf="showBack" class="ShowBack" (click)="goBack()">⬅ Back</button>
+    </div>
   </div>
 </div>
-

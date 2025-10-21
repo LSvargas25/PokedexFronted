@@ -134,3 +134,11 @@
   accent-color: #ffcb05;
   filter: drop-shadow(0 0 3px #ffcb05);
 }
+.dynamic-component{
+  height: 100%;
+  width: 100%;
+}
+.ShowBack{
+  z-index: 999;
+  display: flex;
+}
