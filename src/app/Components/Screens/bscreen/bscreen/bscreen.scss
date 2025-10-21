@@ -6,7 +6,7 @@
   right: 340px;
   border: 2px solid white;
   border-radius: 4px;
-  overflow: hidden; /* Importante para que la animación no se salga */
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,33 +25,33 @@ video {
   z-index: 0;
 }
 
-
-
-.poke-top {
+.poke-split {
   position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.poke-top, .poke-bottom {
+  position: relative;
   width: 100%;
   height: 50%;
   overflow: hidden;
 }
 
-.poke-top {
-  top: 0;
-}
-
-.poke-top img {
-  width: 100%;
-  height: 200%; /* Duplicamos altura para poder animar */
-  top: 0;
-  position: relative;
-}
-
-.poke-bottom {
-  bottom: 0;
-}
-
+.poke-top img,
 .poke-bottom img {
   width: 100%;
   height: 200%;
-  top: -100%; /* Inicia mostrando la mitad inferior */
   position: relative;
+}
+
+.poke-top img {
+  top: 0;
+}
+
+.poke-bottom img {
+  top: -100%;
 }

@@ -20,7 +20,7 @@ export class AScreen implements AfterViewInit {
   options = ['Poked', 'Pokémon Search', 'Trainer Info', 'Settings'];
 
   // 🎚️ Control de volumen
-  volume: number = 0.5;
+  volume: number = 0.3;
   isMuted: boolean = false;
   volumeIcon: string = '🔉'; // icono inicial
 
@@ -71,12 +71,24 @@ export class AScreen implements AfterViewInit {
   onOptionClick(option: string) {
     console.log('Seleccionaste:', option);
   }
-
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    this.videoPlayer.nativeElement.muted = this.isMuted;
-    this.updateVolumeIcon();
+toggleMute() {
+  // Si está muteado o el volumen es 0, sube a 0.3 y desactiva el mute
+  if (this.isMuted || this.volume === 0) {
+    this.isMuted = false;
+    this.volume = 0.3;
+    this.videoPlayer.nativeElement.muted = false;
+    this.videoPlayer.nativeElement.volume = this.volume;
   }
+  // Si tiene volumen (por ejemplo 0.3 o más), mutea
+  else {
+    this.isMuted = true;
+    this.volume = 0;
+    this.videoPlayer.nativeElement.muted = true;
+  }
+
+  this.updateVolumeIcon(true);
+}
+
 
   changeVolume() {
     const video = this.videoPlayer.nativeElement;
@@ -86,24 +98,40 @@ export class AScreen implements AfterViewInit {
     this.updateVolumeIcon(true);
   }
 
-  // 🌀 Actualiza el ícono según el volumen
-  private updateVolumeIcon(animated: boolean = false) {
-    if (this.isMuted || this.volume === 0) {
-      this.volumeIcon = '🔇';
-    } else if (this.volume < 0.3) {
-      this.volumeIcon = '🔈';
-    } else if (this.volume < 0.7) {
-      this.volumeIcon = '🔉';
-    } else {
-      this.volumeIcon = '🔊';
-    }
+  //  Actualiza el ícono según el volumen
+ onVolumeIconClick() {
+  // Si está muteado o volumen en 0, sube a 0.3
+  if (this.isMuted || this.volume === 0) {
+    this.isMuted = false;
+    this.volume = 0.3;
+  }
+  // Si el volumen está en 0.3 o menos, mutea
+  else if (this.volume <= 0.3) {
+    this.isMuted = true;
+    this.volume = 0;
+  }
 
-    if (animated) {
-      const icon = document.querySelector('.volume-icon');
-      if (icon) {
-        icon.classList.add('bounce');
-        setTimeout(() => icon.classList.remove('bounce'), 300);
-      }
+  // Actualiza el ícono con animación
+  this.updateVolumeIcon(true);
+}
+
+private updateVolumeIcon(animated: boolean = false) {
+  if (this.isMuted || this.volume === 0) {
+    this.volumeIcon = '🔇';
+  } else if (this.volume < 0.3) {
+    this.volumeIcon = '🔈';
+  } else if (this.volume < 0.7) {
+    this.volumeIcon = '🔉';
+  } else {
+    this.volumeIcon = '🔊';
+  }
+
+  if (animated) {
+    const icon = document.querySelector('.volume-icon');
+    if (icon) {
+      icon.classList.add('bounce');
+      setTimeout(() => icon.classList.remove('bounce'), 300);
     }
   }
+}
 }
