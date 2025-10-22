@@ -1,6 +1,12 @@
 <div class="screenb">
   <!-- Video de fondo -->
-  <video #videoPlayer [src]="currentVideo" autoplay muted loop></video>
+  <video *ngIf="!currentBComponent"
+         #videoPlayer
+         [src]="currentVideo"
+         autoplay
+         muted
+         loop>
+  </video>
 
   <!-- Imagen dividida -->
   <div #pokeSplit class="poke-split">
@@ -12,10 +18,6 @@
     </div>
   </div>
 
-  <!-- Carga dinámica de componente -->
- <ng-container *ngIf="currentBComponent === 'pokedSecondWindow'">
-  <div class="screeninb">
-    <p>poked-service works on the B screen!</p>
-  </div>
-</ng-container>
-
+  <!-- Componente dinámico -->
+  <ng-container *ngIf="currentBComponent" [ngComponentOutlet]="currentBComponent"></ng-container>
+</div>

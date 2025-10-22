@@ -1,14 +1,16 @@
-import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef, Type } from '@angular/core';
 import { ScreenService } from '../../../../Services/On-OFF Service/screen-service';
 import { gsap } from 'gsap';
 import { PokedService } from '../../../../Services/Screens/poked-screen-state';
 import { BScreenPoked } from '../../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-bscreen',
   templateUrl: './bscreen.html',
   styleUrls: ['./bscreen.scss'],
-  imports: [  ]
+  standalone: true,
+  imports: [BScreenPoked,CommonModule]
 })
 export class Bscreen implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -16,91 +18,41 @@ export class Bscreen implements AfterViewInit {
 
   isOn = false;
   currentVideo = 'assets/videos/pokevid.mp4';
-  currentBComponent: string | null = null;
+  currentBComponent: Type<any> | null = null;
 
-     constructor(
-  private screenService: ScreenService,
-  private cd: ChangeDetectorRef,
-  private pokedService: PokedService
-) {
-  this.screenService.screenState$.subscribe(state => {
-    this.isOn = state;
-    this.cd.detectChanges();
+  constructor(
+    private screenService: ScreenService,
+    private cd: ChangeDetectorRef,
+    private pokedService: PokedService
+  ) {
+    this.screenService.screenState$.subscribe(state => {
+      this.isOn = state;
+      this.cd.detectChanges();
+      if (this.isOn) this.startScreen();
+      else this.offScreen();
+    });
 
-    if (this.isOn) this.startScreen();
-    else this.offScreen();
-  });
+    this.screenService.reset$.subscribe(() => this.resetScreenState());
 
-  this.screenService.reset$.subscribe(() => this.resetScreenState());
+    this.pokedService.state$.subscribe(data => {
+      if (data.bScreenContent) this.loadBScreenContent(data.bScreenContent);
+      else this.clearBScreenContent();
+    });
+  }
 
-  // 👇 Nueva suscripción
-  this.pokedService.state$.subscribe(data => {
-    if (data.bScreenContent) {
-      this.loadBScreenContent(data.bScreenContent);
-    } else {
-      this.clearBScreenContent();
-    }
-  });
-}
+  ngAfterViewInit() {
+    this.playVideo();
+  }
 
-private loadBScreenContent(content: string) {
-  this.currentBComponent = content;
-}
-
-private clearBScreenContent() {
-  this.currentBComponent = null;
-}
-
-
-
-  ngAfterViewInit() {}
-
-  /** Pantalla encendida */
   startScreen() {
-    this.currentVideo = 'assets/videos/pokevid.mp4';
     if (this.pokeSplit) this.pokeSplit.nativeElement.style.display = 'flex';
     setTimeout(() => this.animatePoke(), 50);
   }
-private resetScreenState() {
-  this.currentBComponent = null;
-  this.currentVideo = 'assets/videos/pokevid.mp4';
 
-  if (this.pokeSplit) {
-    const pokeSplitEl = this.pokeSplit.nativeElement;
-    pokeSplitEl.style.display = 'flex';
-    const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
-    const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
-    gsap.set([top, bottom], { y: '0%' });
-  }
-
-  const video = this.videoPlayer?.nativeElement;
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
-  }
-
-  console.log('🔄 Bscreen reiniciada completamente');
-}
-
-  /** Pantalla apagada */
   offScreen() {
-    if (this.videoPlayer) {
-      const video = this.videoPlayer.nativeElement;
-      video.pause();
-      video.currentTime = 0;
-    }
-
-    if (this.pokeSplit) {
-      const pokeSplitEl = this.pokeSplit.nativeElement;
-      pokeSplitEl.style.display = 'flex';
-      const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
-      const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
-      gsap.set(top, { y: '0%' });
-      gsap.set(bottom, { y: '0%' });
-    }
+    this.stopVideo();
   }
 
-  /** Animación de apertura */
   private animatePoke() {
     if (!this.pokeSplit) return;
     const pokeSplitEl = this.pokeSplit.nativeElement;
@@ -119,31 +71,49 @@ private resetScreenState() {
     });
   }
 
-  /** Reproducir video con efecto ida y vuelta */
   private playVideo() {
-    if (!this.videoPlayer) return;
+    if (!this.videoPlayer || this.currentBComponent) return;
     const video = this.videoPlayer.nativeElement;
-
     video.currentTime = 0;
     video.muted = true;
     video.play().catch(err => console.log('Error reproduciendo video:', err));
+  }
 
-    let forward = true;
-    const speed = 1;
+  private stopVideo() {
+    if (!this.videoPlayer) return;
+    const video = this.videoPlayer.nativeElement;
+    video.pause();
+    video.currentTime = 0;
+  }
 
-    // Eliminamos escuchas previas
-    video.removeEventListener('timeupdate', (video as any)._reverseHandler);
+  private loadBScreenContent(content: string) {
+    switch(content) {
+      case 'BScreenPoked':
+        this.currentBComponent = BScreenPoked;
+        this.stopVideo();
+        break;
+      default:
+        this.currentBComponent = null;
+        this.playVideo();
+        break;
+    }
+  }
 
-    const handler = () => {
-      if (forward) {
-        if (video.currentTime >= video.duration - 0.1) forward = false;
-      } else {
-        video.currentTime -= 0.05 * speed;
-        if (video.currentTime <= 0.1) forward = true;
-      }
-    };
+  private clearBScreenContent() {
+    this.currentBComponent = null;
+    this.playVideo();
+  }
 
-    (video as any)._reverseHandler = handler;
-    video.addEventListener('timeupdate', handler);
+  private resetScreenState() {
+    this.currentBComponent = null;
+    this.currentVideo = 'assets/videos/pokevid.mp4';
+    if (this.pokeSplit) {
+      const pokeSplitEl = this.pokeSplit.nativeElement;
+      pokeSplitEl.style.display = 'flex';
+      const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
+      const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
+      gsap.set([top, bottom], { y: '0%' });
+    }
+    this.stopVideo();
   }
 }
