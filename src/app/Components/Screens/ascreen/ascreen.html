@@ -10,6 +10,7 @@
 
   <!-- Pantalla encendida -->
   <div *ngIf="isOn" class="welcome-screen">
+
     <!-- Video -->
     <video
       *ngIf="!currentComponent"
@@ -23,15 +24,6 @@
       disablepictureinpicture>
     </video>
 
-    <!-- Control de volumen -->
-    <div *ngIf="showMenu && !currentComponent" class="volume-control">
-      <button class="volume-btn" (click)="toggleMute()">
-        <span class="volume-icon">{{ volumeIcon }}</span>
-      </button>
-      <input type="range" min="0" max="1" step="0.01"
-             [(ngModel)]="volume" (input)="changeVolume()" />
-    </div>
-
     <!-- Menú -->
     <div *ngIf="showMenu && !currentComponent" class="menu-options">
       <button *ngFor="let option of options; let i = index"
@@ -42,24 +34,11 @@
       </button>
     </div>
 
-     <div class="dynamic-component">
-  <div *ngIf="currentComponent === 'Poked'">
-
+    <!-- Componente dinámico -->
+    <div class="dynamic-component" *ngIf="currentComponent">
+      <ng-container *ngComponentOutlet="currentComponent"></ng-container>
     </div>
+
+    <button *ngIf="showBack" class="ShowBack" (click)="goBack()">Back</button>
   </div>
-  <div *ngIf="currentComponent === 'Pokémon Search'">
-
-  </div>
-
-  <div *ngIf="currentComponent === 'Trainer Info'">
-
-  </div>
-
-  <div *ngIf="currentComponent === 'Settings'">
-
-  </div>
-
-  <button *ngIf="showBack" class="ShowBack" (click)="goBack()">Back</button>
-</div>
-
 </div>

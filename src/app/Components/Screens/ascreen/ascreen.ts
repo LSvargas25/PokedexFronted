@@ -1,25 +1,27 @@
-
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
 import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 import { PokedService } from '../../../Services/Screens/poked-screen-state';
 import { AscreenPoked } from '../../Options/Poked/AScreen/ascreen-poked/ascreen-poked';
+import { BScreenPoked } from '../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';
+
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule,AscreenPoked ],
+  imports: [CommonModule, FormsModule, AscreenPoked, BScreenPoked],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
 export class AScreen implements AfterViewInit {
+
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   @ViewChild('blackSplit') blackSplit!: ElementRef<HTMLDivElement>;
 
   isOn = false;
   showMenu = false;
-  currentComponent: string | null = null;
+  currentComponent: Type<any> | null = null; // componente dinámico
   currentVideo = 'assets/videos/intro.mp4';
   options = ['Poked', 'Pokémon Search', 'Trainer Info', 'Settings'];
   showBack = false;
@@ -27,37 +29,26 @@ export class AScreen implements AfterViewInit {
   volume = 0.3;
   isMuted = false;
   volumeIcon = '🔉';
+
   constructor(
-  private screenService: ScreenService,
-  private pokedService: PokedService
-) {
-  // Ya tienes tu screenService...
-  this.screenService.screenState$.subscribe(state => {
-    if (state && !this.isOn) this.startScreen();
-    else if (!state && this.isOn) this.stopScreen();
-    this.isOn = state;
-  });
+    private screenService: ScreenService,
+    private pokedService: PokedService
+  ) {
+    // Escucha estado de la pantalla (encendido/apagado)
+    this.screenService.screenState$.subscribe(state => {
+      if (state && !this.isOn) this.startScreen();
+      else if (!state && this.isOn) this.stopScreen();
+      this.isOn = state;
+    });
 
-  this.screenService.reset$.subscribe(() => this.resetScreenState());
+    this.screenService.reset$.subscribe(() => this.resetScreenState());
 
-  // 👇 Nueva suscripción al servicio de contenido
-  this.pokedService.state$.subscribe(data => {
-    if (data.aScreenContent) {
-      this.loadAScreenContent(data.aScreenContent);
-    } else {
-      this.clearAScreenContent();
-    }
-  });
-}
- private loadAScreenContent(content: string) {
-  this.currentComponent = content;
-}
-
-private clearAScreenContent() {
-  this.currentComponent = null;
-}
-
-
+    // Escucha contenido de AScreen desde el servicio
+    this.pokedService.state$.subscribe(data => {
+      if (data.aScreenContent) this.loadAScreenContent(data.aScreenContent);
+      else this.clearAScreenContent();
+    });
+  }
 
   ngAfterViewInit() {
     if (this.videoPlayer) this.videoPlayer.nativeElement.volume = this.volume;
@@ -72,12 +63,10 @@ private clearAScreenContent() {
     const top = splitEl.querySelector('.black-top') as HTMLElement;
     const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
 
-    // Empieza cerrada (mitades cubriendo el centro)
     gsap.set(top, { y: '0%' });
     gsap.set(bottom, { y: '0%' });
     splitEl.style.display = 'flex';
 
-    // Se abren suavemente hacia arriba y abajo
     gsap.to(top, { y: '-100%', duration: 1, ease: 'power2.inOut' });
     gsap.to(bottom, {
       y: '100%',
@@ -96,26 +85,19 @@ private clearAScreenContent() {
     const top = splitEl.querySelector('.black-top') as HTMLElement;
     const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
 
-    // Aseguramos que sea visible
     splitEl.style.display = 'flex';
-
-    // Empieza fuera del área
     gsap.set(top, { y: '-100%' });
     gsap.set(bottom, { y: '100%' });
 
-    // Se cierran hacia el centro
     gsap.to(top, { y: '0%', duration: 1, ease: 'power2.inOut' });
     gsap.to(bottom, {
       y: '0%',
       duration: 1,
       ease: 'power2.inOut',
-      onComplete: () => {
-        this.finishPowerOff();
-      }
+      onComplete: () => this.finishPowerOff()
     });
   }
 
-  /** ⚫ Acción final tras apagarse */
   private finishPowerOff() {
     const video = this.videoPlayer?.nativeElement;
     if (video) {
@@ -153,6 +135,7 @@ private clearAScreenContent() {
 
     console.log('🔄 Pokedex reiniciada completamente');
   }
+
   onVideoEnded() {
     if (!this.showMenu) {
       this.showMenu = true;
@@ -160,45 +143,62 @@ private clearAScreenContent() {
       setTimeout(() => this.playVideo(), 0);
     }
   }
- onOptionClick(option: string) {
-  this.showMenu = false;
-  this.showBack = true;
-  const video = this.videoPlayer?.nativeElement;
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
+
+  // 🔹 Cargar componente dinámico según el servicio
+  private loadAScreenContent(content: string) {
+    switch(content) {
+      case 'Poked':
+        this.currentComponent = AscreenPoked;
+        break;
+      // Otros componentes pueden agregarse aquí
+      default:
+        this.currentComponent = null;
+        break;
+    }
   }
-  this.currentVideo = '';
 
-  switch (option) {
-    case 'Poked':
-      this.currentComponent = 'Poked';
-      this.pokedService.setScreens('Poked', 'pokedSecondWindow'); // 👈 sincroniza con Bscreen
-      break;
-    case 'Pokémon Search':
-      this.currentComponent = 'Pokémon Search';
-      this.pokedService.setScreens('Pokémon Search', null);
-      break;
-    case 'Trainer Info':
-      this.currentComponent = 'Trainer Info';
-      this.pokedService.setScreens('Trainer Info', null);
-      break;
-    case 'Settings':
-      this.currentComponent = 'Settings';
-      this.pokedService.setScreens('Settings', null);
-      break;
+  private clearAScreenContent() {
+    this.currentComponent = null;
   }
-}
 
-   goBack() {
-  this.pokedService.reset();
-  this.currentComponent = null;
-  this.showBack = false;
-  this.showMenu = true;
-  this.currentVideo = 'assets/videos/pikachu.mp4';
-  setTimeout(() => this.playVideo(), 0);
-}
+  onOptionClick(option: string) {
+    this.showMenu = false;
+    this.showBack = true;
+    const video = this.videoPlayer?.nativeElement;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+    this.currentVideo = '';
 
+    switch(option) {
+      case 'Poked':
+        this.currentComponent = AscreenPoked;
+        this.pokedService.setScreens('Poked', 'BScreenPoked'); // sincroniza con B
+        break;
+      case 'Pokémon Search':
+        this.currentComponent = null;
+        this.pokedService.setScreens('Pokémon Search', null);
+        break;
+      case 'Trainer Info':
+        this.currentComponent = null;
+        this.pokedService.setScreens('Trainer Info', null);
+        break;
+      case 'Settings':
+        this.currentComponent = null;
+        this.pokedService.setScreens('Settings', null);
+        break;
+    }
+  }
+
+  goBack() {
+    this.pokedService.reset();
+    this.currentComponent = null;
+    this.showBack = false;
+    this.showMenu = true;
+    this.currentVideo = 'assets/videos/pikachu.mp4';
+    setTimeout(() => this.playVideo(), 0);
+  }
 
   toggleMute() {
     const video = this.videoPlayer.nativeElement;
