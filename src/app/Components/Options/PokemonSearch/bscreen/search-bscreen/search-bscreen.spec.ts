@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Poked } from './poked';
+import { SearchBscreen } from './search-bscreen';
 
-describe('Poked', () => {
-  let component: Poked;
-  let fixture: ComponentFixture<Poked>;
+describe('SearchBscreen', () => {
+  let component: SearchBscreen;
+  let fixture: ComponentFixture<SearchBscreen>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Poked]
+      imports: [SearchBscreen]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Poked);
+    fixture = TestBed.createComponent(SearchBscreen);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

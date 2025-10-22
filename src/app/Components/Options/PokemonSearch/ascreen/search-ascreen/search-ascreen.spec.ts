@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Settings } from './settings';
+import { SearchAscreen } from './search-ascreen';
 
-describe('Settings', () => {
-  let component: Settings;
-  let fixture: ComponentFixture<Settings>;
+describe('SearchAscreen', () => {
+  let component: SearchAscreen;
+  let fixture: ComponentFixture<SearchAscreen>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Settings]
+      imports: [SearchAscreen]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Settings);
+    fixture = TestBed.createComponent(SearchAscreen);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

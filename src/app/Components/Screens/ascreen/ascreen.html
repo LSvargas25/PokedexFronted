@@ -44,10 +44,10 @@
 
     <!-- Componentes dinámicos -->
     <div class="dynamic-component">
-      <div *ngIf="currentComponent === 'Poked'"><app-poked></app-poked></div>
-      <div *ngIf="currentComponent === 'Pokémon Search'"><app-pokemon-search></app-pokemon-search></div>
-      <div *ngIf="currentComponent === 'Trainer Info'"><app-trainer-info></app-trainer-info></div>
-      <div *ngIf="currentComponent === 'Settings'" class="setting"><app-settings></app-settings></div>
+      <div *ngIf="currentComponent === 'Poked'"> </div>
+      <div *ngIf="currentComponent === 'Pokémon Search'"> </div>
+      <div *ngIf="currentComponent === 'Trainer Info'"> </div>
+      <div *ngIf="currentComponent === 'Settings'" class="setting"> </div>
 
       <!-- Botón Back -->
       <button *ngIf="showBack" class="ShowBack" (click)="goBack()">Back</button>

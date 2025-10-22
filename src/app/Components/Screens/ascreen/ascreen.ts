@@ -2,17 +2,12 @@ import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
-import { ScreenService } from '../../../Services/screen-service';
-import { PokefronService } from '../../../Services/Options/Poked/pokefron-service';
-import { Poked } from "../../Options/Poked/poked/poked";
-import { PokemonSearch } from "../../Options/PokemonSearch/pokemon-search/pokemon-search";
-import { TrainerInfo } from "../../Options/TrainerInfo/trainer-info/trainer-info";
-import { Settings } from "../../Options/Settings/settings/settings";
+import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule, Poked, PokemonSearch, TrainerInfo, Settings],
+  imports: [CommonModule, FormsModule, ],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
@@ -32,8 +27,7 @@ export class AScreen implements AfterViewInit {
   volumeIcon = '🔉';
 
   constructor(
-   private screenService: ScreenService,
-  private pokefronService: PokefronService
+   private screenService: ScreenService
   ) {
     this.screenService.screenState$.subscribe(state => {
       this.isOn = state;
@@ -55,13 +49,7 @@ export class AScreen implements AfterViewInit {
     this.updateVolumeIcon();
   }
 
-  ngOnInit() {
-    this.pokefronService.screenA$.subscribe(component => {
-      this.currentComponent = component;
-      this.showBack = !!component;
-      this.showMenu = !component;
-    });
-  }
+
 
   /** Pantalla encendida: arranca la animación */
   startScreen() {
@@ -158,7 +146,7 @@ export class AScreen implements AfterViewInit {
     switch (option) {
       case 'Poked':
         this.currentComponent = 'Poked';
-        this.pokefronService.setScreenComponents('Poked', 'pokedSecondWindow');
+           this.currentComponent =  'Poked' ;
         break;
       case 'Pokémon Search':
         this.currentComponent = 'Pokémon Search';

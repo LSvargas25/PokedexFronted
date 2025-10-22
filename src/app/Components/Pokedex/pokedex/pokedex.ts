@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ScreenService } from '../../../Services/screen-service';
+import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 import { AScreen } from '../../Screens/ascreen/ascreen';
 import { Bscreen } from '../../Screens/bscreen/bscreen/bscreen';
 

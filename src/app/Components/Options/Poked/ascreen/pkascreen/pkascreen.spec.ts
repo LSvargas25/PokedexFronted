@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrainerInfo } from './trainer-info';
+import { PKAscreen } from './pkascreen';
 
-describe('TrainerInfo', () => {
-  let component: TrainerInfo;
-  let fixture: ComponentFixture<TrainerInfo>;
+describe('PKAscreen', () => {
+  let component: PKAscreen;
+  let fixture: ComponentFixture<PKAscreen>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrainerInfo]
+      imports: [PKAscreen]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrainerInfo);
+    fixture = TestBed.createComponent(PKAscreen);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

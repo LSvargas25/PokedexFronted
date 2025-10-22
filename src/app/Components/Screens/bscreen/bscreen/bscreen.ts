@@ -1,14 +1,12 @@
 import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ScreenService } from '../../../../Services/screen-service';
-import { PokefronService } from '../../../../Services/Options/Poked/pokefron-service';
+import { ScreenService } from '../../../../Services/On-OFF Service/screen-service';
 import { gsap } from 'gsap';
-import { PokedSecondWindow } from "../../../Options/Poked/poked/pokedSecondWindow/poked-second-window/poked-second-window";
 
 @Component({
   selector: 'app-bscreen',
   templateUrl: './bscreen.html',
   styleUrls: ['./bscreen.scss'],
-  imports: [PokedSecondWindow]
+  imports: [  ]
 })
 export class Bscreen implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -20,8 +18,7 @@ export class Bscreen implements AfterViewInit {
 
   constructor(
     private screenService: ScreenService,
-    private cd: ChangeDetectorRef,
-    private pokefronService: PokefronService
+    private cd: ChangeDetectorRef
   ) {
     // Suscribirse al estado de la pantalla
     this.screenService.screenState$.subscribe(state => {
@@ -32,11 +29,7 @@ export class Bscreen implements AfterViewInit {
       else this.offScreen();
     });
 
-    // Suscribirse a screenB$ para cargar componentes dinámicamente
-    this.pokefronService.screenB$.subscribe(component => {
-      this.currentBComponent = component;
-      this.cd.detectChanges(); // actualiza el DOM
-    });
+
   }
 
   ngAfterViewInit() {}

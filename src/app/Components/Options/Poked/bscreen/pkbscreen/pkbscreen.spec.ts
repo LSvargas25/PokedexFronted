@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PokedSecondWindow } from './poked-second-window';
+import { PKBscreen } from './pkbscreen';
 
-describe('PokedSecondWindow', () => {
-  let component: PokedSecondWindow;
-  let fixture: ComponentFixture<PokedSecondWindow>;
+describe('PKBscreen', () => {
+  let component: PKBscreen;
+  let fixture: ComponentFixture<PKBscreen>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PokedSecondWindow]
+      imports: [PKBscreen]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PokedSecondWindow);
+    fixture = TestBed.createComponent(PKBscreen);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
