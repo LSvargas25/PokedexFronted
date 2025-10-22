@@ -1,26 +1,33 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScreenService {
 
-  // Estado de la pantalla: true = encendida, false = apagada
   private screenState = new BehaviorSubject<boolean>(false);
-
-  // Observable público para que otros componentes puedan suscribirse
   screenState$ = this.screenState.asObservable();
 
-  constructor() { }
+  // 🔁 Nuevo Subject para notificar un reinicio completo
+  private resetSubject = new Subject<void>();
+  reset$ = this.resetSubject.asObservable();
 
-  // Método para encender
+  constructor() {}
+
   powerOn() {
     this.screenState.next(true);
   }
 
-  // Método para apagar
   powerOff() {
     this.screenState.next(false);
+
+    // 🚨 Emitimos el reset cuando se apaga la Pokedex
+    this.resetSubject.next();
+  }
+
+  // Si quisieras forzar el reinicio desde otro lugar:
+  resetApp() {
+    this.resetSubject.next();
   }
 }

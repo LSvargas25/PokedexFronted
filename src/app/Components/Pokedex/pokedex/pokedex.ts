@@ -32,6 +32,7 @@ constructor(private screenService: ScreenService) {
 
   powerOff() {
     this.screenService.powerOff();
+
   }
 
   startScreen() {

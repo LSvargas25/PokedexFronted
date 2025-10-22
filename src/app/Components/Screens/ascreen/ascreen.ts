@@ -32,15 +32,22 @@ export class AScreen implements AfterViewInit {
   volumeIcon = '🔉';
 
   constructor(
-    private screenService: ScreenService,
-    private pokefronService: PokefronService
+   private screenService: ScreenService,
+  private pokefronService: PokefronService
   ) {
     this.screenService.screenState$.subscribe(state => {
       this.isOn = state;
       if (this.isOn) this.startScreen();
       else this.stopScreen();
     });
+
+ this.screenService.reset$.subscribe(() => {
+    this.resetScreenState();
+  });
+
   }
+
+
 
   ngAfterViewInit() {
     this.playVideo();
@@ -105,6 +112,30 @@ export class AScreen implements AfterViewInit {
     video.muted = this.isMuted;
     video.play();
   }
+  private resetScreenState() {
+  this.showMenu = false;
+  this.showBack = false;
+  this.currentComponent = null;
+  this.currentVideo = 'assets/videos/intro.mp4';
+
+  // Resetea animación visual si existe
+  if (this.blackSplit) {
+    const splitEl = this.blackSplit.nativeElement;
+    splitEl.style.display = 'flex';
+    const top = splitEl.querySelector('.black-top') as HTMLElement;
+    const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
+    gsap.set([top, bottom], { y: '0%' });
+  }
+
+  // Detenemos cualquier video en reproducción
+  const video = this.videoPlayer?.nativeElement;
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+
+  console.log('🔄 Pokedex reiniciada completamente');
+}
 
   onVideoEnded() {
     if (!this.showMenu) {
