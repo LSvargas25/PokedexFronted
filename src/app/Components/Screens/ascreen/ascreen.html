@@ -1,21 +1,48 @@
 <div class="screen"> <!-- Pantalla apagada -->
   <div *ngIf="!isOn" class="screen-off"></div> <!-- Pantalla encendida -->
   <div *ngIf="isOn" class="welcome-screen"> <!-- Video de fondo: solo si no hay componente cargado --> <video
-      *ngIf="!currentComponent" #videoPlayer [src]="currentVideo" autoplay [loop]="showMenu" [class.intro]="!showMenu"
-      [class.menu]="showMenu" (ended)="onVideoEnded()" disablepictureinpicture></video>
+      *ngIf="!currentComponent"
+       #videoPlayer
+       [src]="currentVideo"
+       autoplay
+       [loop]="showMenu"
+       [class.intro]="!showMenu"
+      [class.menu]="showMenu"
+      (ended)="onVideoEnded()"
+      disablepictureinpicture></video>
+
     <!-- Control de volumen: solo visible cuando hay menú -->
-    <div *ngIf="showMenu && !currentComponent" class="volume-control"> <button class="volume-btn"
-        (click)="toggleMute()"> <span class="volume-icon">{{ volumeIcon }}</span> </button> <input type="range" min="0"
-        max="1" step="0.01" [(ngModel)]="volume" (input)="changeVolume()" /> </div>
+    <div *ngIf="showMenu && !currentComponent"class="volume-control">
+     <button class="volume-btn"
+        (click)="toggleMute()">
+        <span class="volume-icon">{{ volumeIcon }}</span>
+       </button>
+        <input type="range"
+        min="0"
+        max="1" step="0.01"
+        [(ngModel)]="volume"
+        (input)="changeVolume()" /> </div>
     <!-- Menú principal: solo visible cuando hay menú -->
     <div *ngIf="showMenu && !currentComponent" class="menu-options"> <button *ngFor="let option of options"
         class="option-btn" (click)="onOptionClick(option)"> {{ option }} </button> </div>
     <!-- Carga dinámica de componentes -->
-    <div class="dynamic-component"> <ng-container *ngIf="currentComponent === 'Poked'"> <app-poked></app-poked>
-      </ng-container> <ng-container *ngIf="currentComponent === 'Pokémon Search'">
-        <app-pokemon-search></app-pokemon-search> </ng-container> <ng-container
-        *ngIf="currentComponent === 'Trainer Info'"> <app-trainer-info></app-trainer-info> </ng-container> <ng-container
-        *ngIf="currentComponent === 'Settings'"> <app-settings></app-settings> </ng-container> <!-- Botón de Back -->
-      <button *ngIf="showBack" class="ShowBack" (click)="goBack()"> Back </button> </div>
+    <div class="dynamic-component">
+       <ng-container *ngIf="currentComponent === 'Poked'">
+         <app-poked></app-poked>
+      </ng-container>
+      <ng-container *ngIf="currentComponent === 'Pokémon Search'">
+        <app-pokemon-search></app-pokemon-search>
+       </ng-container>
+        <ng-container *ngIf="currentComponent === 'Trainer Info'">
+          <app-trainer-info></app-trainer-info>
+        </ng-container>
+         <ng-container *ngIf="currentComponent === 'Settings'">
+          <app-settings></app-settings>
+        </ng-container>
+         <!-- Botón de Back -->
+      <button *ngIf="showBack"
+       class="ShowBack" (click)="goBack()"> Back
+      </button>
+    </div>
   </div>
 </div>
