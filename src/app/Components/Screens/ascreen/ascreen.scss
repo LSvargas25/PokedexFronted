@@ -9,7 +9,7 @@
   border: 2px solid white;
   overflow: hidden;
   z-index: 950;
-  background: black;
+  background: rgb(255, 255, 255);
 }
 
 /* Pantalla apagada */
@@ -72,8 +72,6 @@
   z-index: 2;
 }
 
-
-
 /* Transiciones */
 .welcome-text,
 .menu-options {
@@ -118,10 +116,21 @@
 
 /* 🔁 Animación del ícono */
 @keyframes bounceAnim {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.4); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.4);
+  }
+
+  60% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .bounce {
@@ -134,11 +143,20 @@
   accent-color: #ffcb05;
   filter: drop-shadow(0 0 3px #ffcb05);
 }
-.dynamic-component{
+
+.dynamic-component {
   height: 100%;
   width: 100%;
 }
-.ShowBack{
-  z-index: 999;
+
+.ShowBack {
+  z-index: 599;
   display: flex;
+  position: absolute;
+  gap: 4px;
+  border-radius: 4px;
+  border: white 2px;
+  border-style: double;
+  top: 10px;
+  left: 10px;
 }
