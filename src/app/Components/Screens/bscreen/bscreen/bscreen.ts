@@ -2,6 +2,7 @@ import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef } fr
 import { ScreenService } from '../../../../Services/On-OFF Service/screen-service';
 import { gsap } from 'gsap';
 import { PokedService } from '../../../../Services/Screens/poked-screen-state';
+import { BScreenPoked } from '../../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';
 
 @Component({
   selector: 'app-bscreen',

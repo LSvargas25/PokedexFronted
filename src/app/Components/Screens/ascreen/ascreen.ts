@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
 import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 import { PokedService } from '../../../Services/Screens/poked-screen-state';
+import { AscreenPoked } from '../../Options/Poked/AScreen/ascreen-poked/ascreen-poked';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule ],
+  imports: [CommonModule, FormsModule,AscreenPoked ],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })

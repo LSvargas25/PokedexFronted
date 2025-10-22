@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Poked } from './poked';
+import { AscreenPoked } from './ascreen-poked';
 
-describe('Poked', () => {
-  let component: Poked;
-  let fixture: ComponentFixture<Poked>;
+describe('AscreenPoked', () => {
+  let component: AscreenPoked;
+  let fixture: ComponentFixture<AscreenPoked>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Poked]
+      imports: [AscreenPoked]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Poked);
+    fixture = TestBed.createComponent(AscreenPoked);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
