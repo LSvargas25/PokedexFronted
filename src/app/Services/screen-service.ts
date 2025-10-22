@@ -22,7 +22,7 @@ export class ScreenService {
   powerOff() {
     this.screenState.next(false);
 
-    // 🚨 Emitimos el reset cuando se apaga la Pokedex
+    //  Emitimos el reset cuando se apaga la Pokedex
     this.resetSubject.next();
   }
 
