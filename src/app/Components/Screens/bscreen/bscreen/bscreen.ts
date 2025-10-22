@@ -1,6 +1,7 @@
 import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ScreenService } from '../../../../Services/On-OFF Service/screen-service';
 import { gsap } from 'gsap';
+import { PokedService } from '../../../../Services/Screens/poked-screen-state';
 
 @Component({
   selector: 'app-bscreen',
@@ -16,23 +17,40 @@ export class Bscreen implements AfterViewInit {
   currentVideo = 'assets/videos/pokevid.mp4';
   currentBComponent: string | null = null;
 
-  constructor(
-    private screenService: ScreenService,
-    private cd: ChangeDetectorRef
-  ) {
-    // Suscribirse al estado de la pantalla
-    this.screenService.screenState$.subscribe(state => {
-      this.isOn = state;
-      this.cd.detectChanges();
+     constructor(
+  private screenService: ScreenService,
+  private cd: ChangeDetectorRef,
+  private pokedService: PokedService
+) {
+  this.screenService.screenState$.subscribe(state => {
+    this.isOn = state;
+    this.cd.detectChanges();
 
-      if (this.isOn) this.startScreen();
-      else this.offScreen();
-    });
-        this.screenService.reset$.subscribe(() => {
-    this.resetScreenState();
+    if (this.isOn) this.startScreen();
+    else this.offScreen();
   });
 
-  }
+  this.screenService.reset$.subscribe(() => this.resetScreenState());
+
+  // 👇 Nueva suscripción
+  this.pokedService.state$.subscribe(data => {
+    if (data.bScreenContent) {
+      this.loadBScreenContent(data.bScreenContent);
+    } else {
+      this.clearBScreenContent();
+    }
+  });
+}
+
+private loadBScreenContent(content: string) {
+  this.currentBComponent = content;
+}
+
+private clearBScreenContent() {
+  this.currentBComponent = null;
+}
+
+
 
   ngAfterViewInit() {}
 

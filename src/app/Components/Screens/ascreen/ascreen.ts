@@ -1,14 +1,14 @@
 
-  import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
 import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
-
+import { PokedService } from '../../../Services/Screens/poked-screen-state';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule ],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
@@ -26,16 +26,37 @@ export class AScreen implements AfterViewInit {
   volume = 0.3;
   isMuted = false;
   volumeIcon = '🔉';
+  constructor(
+  private screenService: ScreenService,
+  private pokedService: PokedService
+) {
+  // Ya tienes tu screenService...
+  this.screenService.screenState$.subscribe(state => {
+    if (state && !this.isOn) this.startScreen();
+    else if (!state && this.isOn) this.stopScreen();
+    this.isOn = state;
+  });
 
-  constructor(private screenService: ScreenService) {
-    this.screenService.screenState$.subscribe(state => {
-      if (state && !this.isOn) this.startScreen();
-      else if (!state && this.isOn) this.stopScreen();
-      this.isOn = state;
-    });
+  this.screenService.reset$.subscribe(() => this.resetScreenState());
 
-    this.screenService.reset$.subscribe(() => this.resetScreenState());
-  }
+  // 👇 Nueva suscripción al servicio de contenido
+  this.pokedService.state$.subscribe(data => {
+    if (data.aScreenContent) {
+      this.loadAScreenContent(data.aScreenContent);
+    } else {
+      this.clearAScreenContent();
+    }
+  });
+}
+ private loadAScreenContent(content: string) {
+  this.currentComponent = content;
+}
+
+private clearAScreenContent() {
+  this.currentComponent = null;
+}
+
+
 
   ngAfterViewInit() {
     if (this.videoPlayer) this.videoPlayer.nativeElement.volume = this.volume;
@@ -138,41 +159,45 @@ export class AScreen implements AfterViewInit {
       setTimeout(() => this.playVideo(), 0);
     }
   }
-
-  onOptionClick(option: string) {
-    this.showMenu = false;
-    this.showBack = true;
-    const video = this.videoPlayer?.nativeElement;
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-    }
-    this.currentVideo = '';
-
-    switch (option) {
-      case 'Poked':
-        this.currentComponent = 'Poked';
-           this.currentComponent =  'Poked' ;
-        break;
-      case 'Pokémon Search':
-        this.currentComponent = 'Pokémon Search';
-        break;
-      case 'Trainer Info':
-        this.currentComponent = 'Trainer Info';
-        break;
-      case 'Settings':
-        this.currentComponent = 'Settings';
-        break;
-    }
+ onOptionClick(option: string) {
+  this.showMenu = false;
+  this.showBack = true;
+  const video = this.videoPlayer?.nativeElement;
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
   }
+  this.currentVideo = '';
 
-  goBack() {
-    this.currentComponent = null;
-    this.showBack = false;
-    this.showMenu = true;
-    this.currentVideo = 'assets/videos/pikachu.mp4';
-    setTimeout(() => this.playVideo(), 0);
+  switch (option) {
+    case 'Poked':
+      this.currentComponent = 'Poked';
+      this.pokedService.setScreens('Poked', 'pokedSecondWindow'); // 👈 sincroniza con Bscreen
+      break;
+    case 'Pokémon Search':
+      this.currentComponent = 'Pokémon Search';
+      this.pokedService.setScreens('Pokémon Search', null);
+      break;
+    case 'Trainer Info':
+      this.currentComponent = 'Trainer Info';
+      this.pokedService.setScreens('Trainer Info', null);
+      break;
+    case 'Settings':
+      this.currentComponent = 'Settings';
+      this.pokedService.setScreens('Settings', null);
+      break;
   }
+}
+
+   goBack() {
+  this.pokedService.reset();
+  this.currentComponent = null;
+  this.showBack = false;
+  this.showMenu = true;
+  this.currentVideo = 'assets/videos/pikachu.mp4';
+  setTimeout(() => this.playVideo(), 0);
+}
+
 
   toggleMute() {
     const video = this.videoPlayer.nativeElement;
