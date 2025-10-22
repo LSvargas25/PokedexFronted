@@ -18,20 +18,15 @@
   height: 100%;
   background-color: #001010;
 }
-
+.welcome-screen{
+   width: 100%;
+  height: 100%;
+}
 /* Video intro */
 .welcome-screen video.intro {
   width: 100%;
-  height: 280px;
+  height: 100%;
   object-fit: fill;
-  position: absolute;
-  top: 30px;
-  left: 0;
-  z-index: 999;
-  border-radius: 20px;
-  background-color: black;
-  transform: scale(1) translate(-5px, -10px);
-  transform-origin: center;
 }
 
 /* Video de menú (loop) */
@@ -43,7 +38,7 @@
   top: 0;
   left: 0;
   z-index: 1;
-  transform: scale(1) translate(0px, 0px);
+  transform: scale(0.96) translate(0px, 0px);
   transform-origin: center;
 }
 
@@ -57,32 +52,36 @@
   align-items: center;
   flex-direction: column;
   z-index: 2;
-  padding: 10px;
 }
 
 /* Botones del menú */
 .menu-options {
-  position: relative;
+  position: absolute;
   width: 100%;
-  top: -10px;
-  gap: 2px;
+  left: 10px;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   z-index: 2;
-  padding: 10px;
   font-family: 'Calibri', sans-serif;
+  font-weight: bold;
+
+}
+.setting{
+  top: 80px;
 }
 
 /* Botones del menú */
-.option-btn {
+
+ .option-btn {
   margin: 6px;
-  padding: 10px 18px;
-  background-color: #004040;
-  color: white;
-  border: none;
+  top: -50px;
+  padding: 7px 15px;
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  border: white 2px solid;
   border-radius: 8px;
   cursor: pointer;
   z-index: 2;
@@ -90,16 +89,31 @@
   font-size: 16px;
   letter-spacing: 0.5px;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px 2px 6px rgba(6, 32, 66, 0.623);
+  position: relative;
 }
+.last-btn {
+  top: 45px;
+  border-radius: 30px;
+  height: 40px;
+  align-items: center;
+  width: 100px;
+  left: -122px;
+    color: #ffffff; /* color interno de la letra */
+  position: relative;
+  box-shadow:  1px 1px 1px 6px rgba(23, 41, 19, 0.377);
+}
+
+
 
 /* Efecto hover */
 .option-btn:hover {
-  background-color: white;
-  color: #004040;
-  transform: scale(1.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      color: #000000; /* color interno de la letra */
+  font-weight: bold;
+  background-color: transparentize(#ffffffbe, 0);
+  box-shadow: 1px 1px 2px 6px rgba(255, 205, 5, 0.678);
 }
+
 
 /* Transiciones */
 .welcome-text,
@@ -109,24 +123,29 @@
 
 .volume-control {
   position: absolute;
-  bottom: 10px;
-  right: 15px;
+  width: 100px;
+  height: 30px;
+  gap: 1px;
+  bottom: 30px;
+  right: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
   background: rgba(255, 255, 255, 0.1);
   padding: 6px 12px;
   border-radius: 25px;
   z-index: 1000;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  border: 2px solid rgb(255, 255, 255);
   backdrop-filter: blur(4px);
   transition: all 0.3s ease;
+    box-shadow: 1px 1px 2px 6px rgba(23, 41, 19, 0.623);
 }
 
 .volume-btn {
   background: none;
   border: none;
+  align-items: center;
+  display: flex;
+  gap: 4px;
   font-size: 22px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -167,10 +186,10 @@
 }
 
 .volume-control input[type="range"] {
-  width: 80px;
+  width: 60px;
   cursor: pointer;
   accent-color: #ffcb05;
-  filter: drop-shadow(0 0 3px #ffcb05);
+  filter: drop-shadow(0 0 3px rgb(255, 203, 5));
 }
 
 .dynamic-component {

@@ -23,26 +23,35 @@
         [(ngModel)]="volume"
         (input)="changeVolume()" /> </div>
     <!-- Menú principal: solo visible cuando hay menú -->
-    <div *ngIf="showMenu && !currentComponent" class="menu-options"> <button *ngFor="let option of options"
-        class="option-btn" (click)="onOptionClick(option)"> {{ option }} </button> </div>
+    <div *ngIf="showMenu && !currentComponent" class="menu-options">
+  <button *ngFor="let option of options; let i = index"
+          class="option-btn"
+          [ngClass]="{'last-btn': i === options.length - 1}"
+          (click)="onOptionClick(option)">
+    {{ option }}
+  </button>
+</div>
     <!-- Carga dinámica de componentes -->
-    <div class="dynamic-component">
-       <ng-container *ngIf="currentComponent === 'Poked'">
-         <app-poked></app-poked>
-      </ng-container>
-      <ng-container *ngIf="currentComponent === 'Pokémon Search'">
-        <app-pokemon-search></app-pokemon-search>
-       </ng-container>
-        <ng-container *ngIf="currentComponent === 'Trainer Info'">
-          <app-trainer-info></app-trainer-info>
-        </ng-container>
-         <ng-container *ngIf="currentComponent === 'Settings'">
-          <app-settings></app-settings>
-        </ng-container>
-         <!-- Botón de Back -->
-      <button *ngIf="showBack"
-       class="ShowBack" (click)="goBack()"> Back
-      </button>
-    </div>
+   <div class="dynamic-component">
+  <div *ngIf="currentComponent === 'Poked'" class="dynamic-child">
+    <app-poked></app-poked>
+  </div>
+
+  <div *ngIf="currentComponent === 'Pokémon Search'" class="dynamic-child">
+    <app-pokemon-search></app-pokemon-search>
+  </div>
+
+  <div *ngIf="currentComponent === 'Trainer Info'" class="dynamic-child">
+    <app-trainer-info></app-trainer-info>
+  </div>
+
+  <div *ngIf="currentComponent === 'Settings'" class="setting">
+    <app-settings></app-settings>
+  </div>
+
+  <!-- Botón de Back -->
+  <button *ngIf="showBack" class="ShowBack" (click)="goBack()">Back</button>
+</div>
+
   </div>
 </div>
