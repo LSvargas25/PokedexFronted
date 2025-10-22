@@ -1,4 +1,5 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+  import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
@@ -7,7 +8,7 @@ import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule, ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
@@ -26,70 +27,80 @@ export class AScreen implements AfterViewInit {
   isMuted = false;
   volumeIcon = '🔉';
 
-  constructor(
-   private screenService: ScreenService
-  ) {
+  constructor(private screenService: ScreenService) {
     this.screenService.screenState$.subscribe(state => {
+      if (state && !this.isOn) this.startScreen();
+      else if (!state && this.isOn) this.stopScreen();
       this.isOn = state;
-      if (this.isOn) this.startScreen();
-      else this.stopScreen();
     });
 
- this.screenService.reset$.subscribe(() => {
-    this.resetScreenState();
-  });
-
+    this.screenService.reset$.subscribe(() => this.resetScreenState());
   }
 
-
-
   ngAfterViewInit() {
-    this.playVideo();
     if (this.videoPlayer) this.videoPlayer.nativeElement.volume = this.volume;
     this.updateVolumeIcon();
   }
 
-
-
-  /** Pantalla encendida: arranca la animación */
-  startScreen() {
+  /** 🔵 Animación de encendido (abrir cortina) */
+  private startScreen() {
     this.showMenu = false;
     this.currentVideo = 'assets/videos/intro.mp4';
+    const splitEl = this.blackSplit.nativeElement;
+    const top = splitEl.querySelector('.black-top') as HTMLElement;
+    const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
 
-    if (this.blackSplit) {
-      const splitEl = this.blackSplit.nativeElement;
-      const top = splitEl.querySelector('.black-top') as HTMLElement;
-      const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
+    // Empieza cerrada (mitades cubriendo el centro)
+    gsap.set(top, { y: '0%' });
+    gsap.set(bottom, { y: '0%' });
+    splitEl.style.display = 'flex';
 
-      gsap.set([top, bottom], { y: '0%' });
-      splitEl.style.display = 'flex';
-
-      // animación de apertura
-      gsap.to(top, { y: '-100%', duration: 1.2, ease: 'power2.inOut' });
-      gsap.to(bottom, {
-        y: '100%',
-        duration: 1.2,
-        ease: 'power2.inOut',
-        onComplete: () => {
-          splitEl.style.display = 'none';
-          this.playVideo();
-        }
-      });
-    } else {
-      this.playVideo();
-    }
+    // Se abren suavemente hacia arriba y abajo
+    gsap.to(top, { y: '-100%', duration: 1, ease: 'power2.inOut' });
+    gsap.to(bottom, {
+      y: '100%',
+      duration: 1,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        splitEl.style.display = 'none';
+        this.playVideo();
+      }
+    });
   }
 
-  stopScreen() {
-    this.showMenu = false;
-    if (this.blackSplit) {
-      const splitEl = this.blackSplit.nativeElement;
-      splitEl.style.display = 'flex';
-      const top = splitEl.querySelector('.black-top') as HTMLElement;
-      const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
-      gsap.set(top, { y: '0%' });
-      gsap.set(bottom, { y: '0%' });
+  /** 🔴 Animación de apagado (cerrar cortina) */
+  private stopScreen() {
+    const splitEl = this.blackSplit.nativeElement;
+    const top = splitEl.querySelector('.black-top') as HTMLElement;
+    const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
+
+    // Aseguramos que sea visible
+    splitEl.style.display = 'flex';
+
+    // Empieza fuera del área
+    gsap.set(top, { y: '-100%' });
+    gsap.set(bottom, { y: '100%' });
+
+    // Se cierran hacia el centro
+    gsap.to(top, { y: '0%', duration: 1, ease: 'power2.inOut' });
+    gsap.to(bottom, {
+      y: '0%',
+      duration: 1,
+      ease: 'power2.inOut',
+      onComplete: () => {
+        this.finishPowerOff();
+      }
+    });
+  }
+
+  /** ⚫ Acción final tras apagarse */
+  private finishPowerOff() {
+    const video = this.videoPlayer?.nativeElement;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
     }
+    console.log('💤 Pantalla apagada');
   }
 
   private playVideo() {
@@ -100,31 +111,26 @@ export class AScreen implements AfterViewInit {
     video.muted = this.isMuted;
     video.play();
   }
-  private resetScreenState() {
-  this.showMenu = false;
-  this.showBack = false;
-  this.currentComponent = null;
-  this.currentVideo = 'assets/videos/intro.mp4';
 
-  // Resetea animación visual si existe
-  if (this.blackSplit) {
+  private resetScreenState() {
+    this.showMenu = false;
+    this.showBack = false;
+    this.currentComponent = null;
+    this.currentVideo = 'assets/videos/intro.mp4';
     const splitEl = this.blackSplit.nativeElement;
     splitEl.style.display = 'flex';
     const top = splitEl.querySelector('.black-top') as HTMLElement;
     const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
     gsap.set([top, bottom], { y: '0%' });
+
+    const video = this.videoPlayer?.nativeElement;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+
+    console.log('🔄 Pokedex reiniciada completamente');
   }
-
-  // Detenemos cualquier video en reproducción
-  const video = this.videoPlayer?.nativeElement;
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
-  }
-
-  console.log('🔄 Pokedex reiniciada completamente');
-}
-
   onVideoEnded() {
     if (!this.showMenu) {
       this.showMenu = true;

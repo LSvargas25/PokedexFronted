@@ -10,22 +10,21 @@
   z-index: 950;
   background: rgb(245, 245, 245);
 }
-
-/* Mitades negras para el efecto */
-.black-split {
+ .black-split {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 1000;
-  display: flex;
+  display: none;
   flex-direction: column;
+  z-index: 2000;
+   pointer-events: none;
 }
 
 .black-top,
 .black-bottom {
   width: 100%;
   height: 50%;
-  background-color: black;
+  background: black;
 }
 
 /* Pantalla apagada */
@@ -49,13 +48,13 @@
 
 /* Video de menú (loop) */
 .welcome-screen video.menu {
+
   width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
   transform: scale(0.96) translate(0px, 0px);
   transform-origin: center;
 }
@@ -69,7 +68,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 2;
 }
 
 /* Botones del menú */
@@ -82,7 +80,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  z-index: 2;
   font-family: 'Calibri', sans-serif;
   font-weight: bold;
 
@@ -102,7 +99,6 @@
   border: white 2px solid;
   border-radius: 8px;
   cursor: pointer;
-  z-index: 2;
   font-weight: bold;
   font-size: 16px;
   letter-spacing: 0.5px;
