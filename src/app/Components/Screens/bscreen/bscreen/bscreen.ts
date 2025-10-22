@@ -28,7 +28,9 @@ export class Bscreen implements AfterViewInit {
       if (this.isOn) this.startScreen();
       else this.offScreen();
     });
-
+        this.screenService.reset$.subscribe(() => {
+    this.resetScreenState();
+  });
 
   }
 
@@ -40,6 +42,26 @@ export class Bscreen implements AfterViewInit {
     if (this.pokeSplit) this.pokeSplit.nativeElement.style.display = 'flex';
     setTimeout(() => this.animatePoke(), 50);
   }
+private resetScreenState() {
+  this.currentBComponent = null;
+  this.currentVideo = 'assets/videos/pokevid.mp4';
+
+  if (this.pokeSplit) {
+    const pokeSplitEl = this.pokeSplit.nativeElement;
+    pokeSplitEl.style.display = 'flex';
+    const top = pokeSplitEl.querySelector('.poke-top') as HTMLElement;
+    const bottom = pokeSplitEl.querySelector('.poke-bottom') as HTMLElement;
+    gsap.set([top, bottom], { y: '0%' });
+  }
+
+  const video = this.videoPlayer?.nativeElement;
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+
+  console.log('🔄 Bscreen reiniciada completamente');
+}
 
   /** Pantalla apagada */
   offScreen() {
