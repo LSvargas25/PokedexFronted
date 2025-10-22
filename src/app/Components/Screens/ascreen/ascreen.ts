@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import gsap from 'gsap';
 import { ScreenService } from '../../../Services/screen-service';
 import { PokefronService } from '../../../Services/Options/Poked/pokefron-service';
 import { Poked } from "../../Options/Poked/poked/poked";
@@ -17,17 +18,18 @@ import { Settings } from "../../Options/Settings/settings/settings";
 })
 export class AScreen implements AfterViewInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  @ViewChild('blackSplit') blackSplit!: ElementRef<HTMLDivElement>;
 
   isOn = false;
   showMenu = false;
   currentComponent: string | null = null;
   currentVideo = 'assets/videos/intro.mp4';
   options = ['Poked', 'Pokémon Search', 'Trainer Info', 'Settings'];
+  showBack = false;
 
-  showBack: boolean = false;
-  volume: number = 0.3;
-  isMuted: boolean = false;
-  volumeIcon: string = '🔉';
+  volume = 0.3;
+  isMuted = false;
+  volumeIcon = '🔉';
 
   constructor(
     private screenService: ScreenService,
@@ -42,38 +44,66 @@ export class AScreen implements AfterViewInit {
 
   ngAfterViewInit() {
     this.playVideo();
-    if (this.videoPlayer) {
-      this.videoPlayer.nativeElement.volume = this.volume;
-    }
+    if (this.videoPlayer) this.videoPlayer.nativeElement.volume = this.volume;
     this.updateVolumeIcon();
   }
 
   ngOnInit() {
     this.pokefronService.screenA$.subscribe(component => {
       this.currentComponent = component;
-      this.showBack = !!component; // muestra Back si hay componente cargado
+      this.showBack = !!component;
       this.showMenu = !component;
     });
   }
 
+  /** Pantalla encendida: arranca la animación */
   startScreen() {
     this.showMenu = false;
     this.currentVideo = 'assets/videos/intro.mp4';
-    setTimeout(() => this.playVideo(), 0);
+
+    if (this.blackSplit) {
+      const splitEl = this.blackSplit.nativeElement;
+      const top = splitEl.querySelector('.black-top') as HTMLElement;
+      const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
+
+      gsap.set([top, bottom], { y: '0%' });
+      splitEl.style.display = 'flex';
+
+      // animación de apertura
+      gsap.to(top, { y: '-100%', duration: 1.2, ease: 'power2.inOut' });
+      gsap.to(bottom, {
+        y: '100%',
+        duration: 1.2,
+        ease: 'power2.inOut',
+        onComplete: () => {
+          splitEl.style.display = 'none';
+          this.playVideo();
+        }
+      });
+    } else {
+      this.playVideo();
+    }
   }
 
   stopScreen() {
     this.showMenu = false;
+    if (this.blackSplit) {
+      const splitEl = this.blackSplit.nativeElement;
+      splitEl.style.display = 'flex';
+      const top = splitEl.querySelector('.black-top') as HTMLElement;
+      const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
+      gsap.set(top, { y: '0%' });
+      gsap.set(bottom, { y: '0%' });
+    }
   }
 
   private playVideo() {
-    if (this.videoPlayer) {
-      const video = this.videoPlayer.nativeElement;
-      video.currentTime = 0;
-      video.volume = this.volume;
-      video.muted = this.isMuted;
-      video.play();
-    }
+    const video = this.videoPlayer?.nativeElement;
+    if (!video) return;
+    video.currentTime = 0;
+    video.volume = this.volume;
+    video.muted = this.isMuted;
+    video.play();
   }
 
   onVideoEnded() {
@@ -87,7 +117,6 @@ export class AScreen implements AfterViewInit {
   onOptionClick(option: string) {
     this.showMenu = false;
     this.showBack = true;
-
     const video = this.videoPlayer?.nativeElement;
     if (video) {
       video.pause();
@@ -112,7 +141,6 @@ export class AScreen implements AfterViewInit {
     }
   }
 
-  // Botón de Back
   goBack() {
     this.currentComponent = null;
     this.showBack = false;
@@ -122,15 +150,16 @@ export class AScreen implements AfterViewInit {
   }
 
   toggleMute() {
+    const video = this.videoPlayer.nativeElement;
     if (this.isMuted || this.volume === 0) {
       this.isMuted = false;
       this.volume = 0.3;
-      this.videoPlayer.nativeElement.muted = false;
-      this.videoPlayer.nativeElement.volume = this.volume;
+      video.muted = false;
+      video.volume = this.volume;
     } else {
       this.isMuted = true;
       this.volume = 0;
-      this.videoPlayer.nativeElement.muted = true;
+      video.muted = true;
     }
     this.updateVolumeIcon(true);
   }
@@ -143,7 +172,7 @@ export class AScreen implements AfterViewInit {
     this.updateVolumeIcon(true);
   }
 
-  private updateVolumeIcon(animated: boolean = false) {
+  private updateVolumeIcon(animated = false) {
     if (this.isMuted || this.volume === 0) this.volumeIcon = '🔇';
     else if (this.volume < 0.3) this.volumeIcon = '🔈';
     else if (this.volume < 0.7) this.volumeIcon = '🔉';
