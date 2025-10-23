@@ -1,8 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-ascreen-pokemon-search',
-  imports: [],
+  imports: [CommonModule],
+    standalone:true,
   templateUrl: './ascreen-pokemon-search.html',
   styleUrl: './ascreen-pokemon-search.scss'
 })
