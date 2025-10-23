@@ -4,13 +4,15 @@ import { gsap } from 'gsap';
 import { PokedService } from '../../../../Services/Screens/poked-screen-state';
 import { BScreenPoked } from '../../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';
 import { CommonModule } from '@angular/common';
+import { BScreenTrainer } from '../../../Options/TrainerInfo/BScreenTrainer/bscreen-trainer/bscreen-trainer';
+import { BScreenPokemonSearch } from '../../../Options/PokemonSearch/BScreenPokemonSearch/bscreen-pokemon-search/bscreen-pokemon-search';
 
 @Component({
   selector: 'app-bscreen',
   templateUrl: './bscreen.html',
   styleUrls: ['./bscreen.scss'],
   standalone: true,
-  imports: [BScreenPoked,CommonModule]
+  imports: [BScreenPoked,CommonModule,BScreenPoked,BScreenTrainer,BScreenPokemonSearch]
 })
 export class Bscreen implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -92,13 +94,21 @@ export class Bscreen implements AfterViewInit {
         this.currentBComponent = BScreenPoked;
         this.stopVideo();
         break;
+        case 'BScreenTrainer':
+        this.currentBComponent = BScreenTrainer;
+        this.stopVideo();
+        break;
+        case 'BScreenPokemonSearch':
+        this.currentBComponent = BScreenPokemonSearch;
+        this.stopVideo();
+        break;
       default:
         this.currentBComponent = null;
         this.playVideo();
         break;
     }
   }
-
+//BScreenPoked,BScreenTrainer,BScreenPokemonSearch
   private clearBScreenContent() {
     this.currentBComponent = null;
     this.playVideo();

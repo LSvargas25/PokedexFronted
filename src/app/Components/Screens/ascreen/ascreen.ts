@@ -11,7 +11,7 @@ import { Settings } from '../../Options/Settings/Settings/settings';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule, AscreenPoked],
+  imports: [CommonModule, FormsModule, AscreenPoked,Settings],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
@@ -151,7 +151,15 @@ export class AScreen implements AfterViewInit {
       case 'Poked':
         this.currentComponent = AscreenPoked;
         break;
-      // Otros componentes pueden agregarse aquí
+         case 'Pokémon Search':
+        this.currentComponent = AScreenPokemonSearch;
+        break;
+      case 'Trainer Info':
+        this.currentComponent = ScreenTrainerInfo;
+        break;
+      case 'Settings':
+        this.currentComponent = Settings;
+        break;
       default:
         this.currentComponent = null;
         break;
@@ -178,15 +186,15 @@ export class AScreen implements AfterViewInit {
         this.pokedService.setScreens('Poked', 'BScreenPoked'); // sincroniza con B
         break;
       case 'Pokémon Search':
-        this.currentComponent = null;
-        this.pokedService.setScreens('Pokémon Search', null);
+        this.currentComponent = AScreenPokemonSearch;
+        this.pokedService.setScreens('Pokémon Search', 'BScreenPokemonSearch');
         break;
       case 'Trainer Info':
-        this.currentComponent = null;
-        this.pokedService.setScreens('Trainer Info', null);
+        this.currentComponent = ScreenTrainerInfo;
+        this.pokedService.setScreens('Trainer Info', 'BScreenTrainer');
         break;
       case 'Settings':
-        this.currentComponent = null;
+        this.currentComponent = Settings;
         this.pokedService.setScreens('Settings', null);
         break;
     }
