@@ -220,6 +220,36 @@
   border-radius: 4px;
   border: white 2px;
   border-style: double;
-  top: 10px;
-  left: 10px;
+  top: 440px;
+
+  left: 200px;
+}
+
+.pokeball-button {
+  width: 60px;          /* tamaño del botón */
+  height: 60px;
+  border: none;         /* sin borde */
+  border-radius: 50%;   /* redondo */
+  background-image: url('/assets/images/pokeball.ico');
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  position:absolute;
+  display: flex;
+  left: 9px;
+  outline: none;        /* quita el borde al hacer click */
+}
+.poket{
+height: 70px;
+align-items: center;
+justify-items: center;
+top: 420px;
+left: 180px;
+position: absolute;
+display: flex;
+border: white 2px solid;
+border-radius: 10px;
+background-color: white;
+width: 80px;
+z-index: 999;
 }
