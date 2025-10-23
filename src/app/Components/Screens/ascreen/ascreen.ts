@@ -5,12 +5,13 @@ import gsap from 'gsap';
 import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
 import { PokedService } from '../../../Services/Screens/poked-screen-state';
 import { AscreenPoked } from '../../Options/Poked/AScreen/ascreen-poked/ascreen-poked';
-import { BScreenPoked } from '../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';
-
+import { AScreenPokemonSearch } from '../../Options/PokemonSearch/AScreenPokemonSearch/ascreen-pokemon-search/ascreen-pokemon-search';
+import { ScreenTrainerInfo } from '../../Options/TrainerInfo/AScreenTrainer/screen-trainer-info/screen-trainer-info';
+import { Settings } from '../../Options/Settings/Settings/settings';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
-  imports: [CommonModule, FormsModule, AscreenPoked, BScreenPoked],
+  imports: [CommonModule, FormsModule, AscreenPoked],
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
@@ -55,7 +56,7 @@ export class AScreen implements AfterViewInit {
     this.updateVolumeIcon();
   }
 
-  /** 🔵 Animación de encendido (abrir cortina) */
+  /**Animación de encendido (abrir la cortina) */
   private startScreen() {
     this.showMenu = false;
     this.currentVideo = 'assets/videos/intro.mp4';

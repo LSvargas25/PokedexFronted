@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
+  background: rgb(255, 254, 254);
   z-index: 999;
 }
 
@@ -39,6 +39,18 @@ video {
   width: 100%;
   height: 50%;
   overflow: hidden;
+}
+.Dynamic{
+   position: absolute;  // Para salir del flujo y superponerse
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;          // Mayor que poke-split (2) y video (0)
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; // No tapar nada
 }
 
 .poke-top img,
