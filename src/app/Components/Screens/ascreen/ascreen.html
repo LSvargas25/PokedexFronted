@@ -11,6 +11,21 @@
   <!-- Pantalla encendida -->
   <div *ngIf="isOn" class="welcome-screen">
 
+  <!-- 🎧 Control de volumen con emojis -->
+    <div *ngIf="showMenu" class="volume-control">
+      <button class="volume-btn" (click)="toggleMute()">
+        <span class="volume-icon">{{ volumeIcon }}</span>
+      </button>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        [(ngModel)]="volume"
+        (input)="changeVolume()"
+      />
+    </div>
+
     <!-- Video -->
     <video
       *ngIf="!currentComponent"
