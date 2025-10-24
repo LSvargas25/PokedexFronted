@@ -22,6 +22,7 @@ export class AScreen implements AfterViewInit {
 
   isOn = false;
   showMenu = false;
+  showBackDiv = false
   currentComponent: Type<any> | null = null; // componente dinámico
   currentVideo = 'assets/videos/intro.mp4';
   options = ['Poked', 'Pokémon Search', 'Trainer Info', 'Settings'];
@@ -173,6 +174,7 @@ export class AScreen implements AfterViewInit {
   onOptionClick(option: string) {
     this.showMenu = false;
     this.showBack = true;
+    this.showBackDiv =true;
     const video = this.videoPlayer?.nativeElement;
     if (video) {
       video.pause();
@@ -204,6 +206,7 @@ export class AScreen implements AfterViewInit {
     this.pokedService.reset();
     this.currentComponent = null;
     this.showBack = false;
+    this.showBackDiv =false;
     this.showMenu = true;
     this.currentVideo = 'assets/videos/pikachu.mp4';
     setTimeout(() => this.playVideo(), 0);
