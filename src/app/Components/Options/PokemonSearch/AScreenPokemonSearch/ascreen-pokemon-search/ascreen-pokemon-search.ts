@@ -9,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './ascreen-pokemon-search.scss'
 })
 export class AScreenPokemonSearch {
+  AScreen = true;
+  Targets =true;
+
+
 
 }

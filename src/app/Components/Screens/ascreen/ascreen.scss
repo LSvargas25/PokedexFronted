@@ -221,10 +221,8 @@
   border: white 2px;
   border-style: double;
   top: 440px;
-
   left: 200px;
 }
-
 .pokeball-button {
   width: 60px;          /* tamaño del botón */
   height: 60px;
@@ -237,8 +235,16 @@
   position:absolute;
   display: flex;
   left: 9px;
-  outline: none;        /* quita el borde al hacer click */
+  outline: none;
 }
+.pokeball-button:hover{
+
+  box-shadow: 1px 1px 10px 9px rgba(255, 205, 5, 0.651);
+
+  transition: transform 0.2s ease;
+
+ }
+
 .poket{
 height: 70px;
 align-items: center;

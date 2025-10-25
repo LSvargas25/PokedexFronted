@@ -1,6 +1,69 @@
+.CardPhoto,.border,.Targert,.TargerBorder,.Card, .BorderImput,.ImputText,.TargerBorder{
+ position: absolute;
+ display: flex;
+ border-radius: 8px;
+ border: 2px rgb(128, 124, 124) solid;
+}
 .Screen{
   height: 100%;
   width: 100%;
-  position: absolute;
+}
+.CardName{
+ top: 13px;
+ left: 130px;
+ position: absolute;
+ display: flex;
+}
+.CardID{
+   top: 23px;
+   left: 80px;
+   position: absolute;
+ display: flex;
+}
+.Content{
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-items: center;
+
+}
+.TargerBorder{
+width: 300px;
+height: 220px;
+top: 100px;
+left: 27px;
+}
+.CardPhoto{
+ width: 40px;
+ height: 40px;
+ top: 25px;
+ left: 234px;
+}
+.Targert{
+  top: 20px;
+  width: 260PX;
+  left: 20px;
+  height: 50px;
+}
+.border{
+ width: 347px;
+ height: 327px;
+ top: 4px;
+ left: 4px;
+}
+
+.BorderImput{
+  width: 140px;
+  height: 45px;
+  top: 15px;
+  left: 105px;
+}
+.ImputText{
+  width: 123px;
+  text-align: center;
+  align-items: center;
+  height: 30px;
+  top: 4.5px;
+  left: 4px;
 
 }

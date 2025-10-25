@@ -1,6 +1,26 @@
-<div class="Screen" >
-  <h1 class="Name" ></h1>
+<div class="Screen" *ngIf="AScreen" >
+<div class="border"></div>
+
+<div class="BorderImput">
+  <input class="ImputText"
+    type="text"
+    placeholder="Search a pokemon..."
+
+  />
+   <!--[(ngModel)]="searchTerm"(keyup)="FilterPokemoness()", esto va arriba -->
 
 
+ </div>
+
+<div *ngIf="Targets" class="TargerBorder">
+  <div class="Content">
+  <div class="Targert"></div>
+  <div class="CardPhoto"></div>
+  <p class="CardID">ID</p>
+  <h2 class="CardName">Name</h2>
+  </div>
 </div>
+</div>
+
+
 
