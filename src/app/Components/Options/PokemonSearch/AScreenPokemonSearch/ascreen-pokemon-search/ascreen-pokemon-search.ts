@@ -49,8 +49,8 @@ export class AScreenPokemonSearch implements OnInit {
   }
 
   updateDisplayed(): void {
-    // Muestra 4 pokemons a partir de currentIndex
-    this.displayedPokemons = this.pokemons.slice(this.currentIndex, this.currentIndex + 4);
+    // Muestra 10 pokemons a partir de currentIndex
+    this.displayedPokemons = this.pokemons.slice(this.currentIndex, this.currentIndex + 10);
   }
 
   scrollUp(): void {
@@ -61,7 +61,7 @@ export class AScreenPokemonSearch implements OnInit {
   }
 
   scrollDown(): void {
-    if (this.currentIndex < this.pokemons.length - 4) {
+    if (this.currentIndex < this.pokemons.length - 10) {
       this.currentIndex++;
       this.updateDisplayed();
     }

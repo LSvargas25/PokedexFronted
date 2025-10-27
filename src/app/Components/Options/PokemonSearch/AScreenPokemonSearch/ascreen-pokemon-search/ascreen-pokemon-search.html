@@ -13,9 +13,10 @@
        (mousemove)="onMouseMove($event, targetsDiv)"
        (mouseleave)="onMouseLeave()"
        #targetsDiv>
-    <div *ngFor="let p of displayedPokemons" class="TargerBorder">
-      <div class="Content">
-        <div class="Targert"></div>
+    <div *ngFor="let p of displayedPokemons" class="DisplayCard">
+
+      <div class="Targert"></div>
+      <div class="Content"a>
         <div class="CardPhoto">
           <img [src]="p.image" [alt]="p.name" />
         </div>
@@ -24,12 +25,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Indicador de posición (opcional) -->
-  <div class="scroll-indicator" *ngIf="pokemons.length > 4">
-    {{currentIndex + 1}} - {{currentIndex + displayedPokemons.length}} / {{pokemons.length}}
-  </div>
-
 </div>
 
 
