@@ -1,25 +1,48 @@
 <div class="Screen" *ngIf="AScreen" >
-<div class="border"></div>
+  <div class="border"></div>
 
-<div class="BorderImput">
-  <input class="ImputText"
-    type="text"
-    placeholder="Search a pokemon..."
-
-  />
-   <!--[(ngModel)]="searchTerm"(keyup)="FilterPokemoness()", esto va arriba -->
-
-
- </div>
-
-<div *ngIf="Targets" class="TargerBorder">
-  <div class="Content">
-  <div class="Targert"></div>
-  <div class="CardPhoto"></div>
-  <p class="CardID">ID</p>
-  <h2 class="CardName">Name</h2>
+  <div class="BorderImput">
+    <input class="ImputText"
+      type="text"
+      placeholder="Search a pokemon..."
+    />
   </div>
-</div>
+
+  <!-- Estado / Depuración -->
+  <div *ngIf="loading" style="position:absolute; top:60px; left:40px; background:#fff; padding:6px; border-radius:4px;">
+    Cargando pokemons...
+  </div>
+
+  <div *ngIf="error" style="position:absolute; top:60px; left:40px; background:#fdd; padding:6px; border-radius:4px; color:#600;">
+    Error: {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" style="position:absolute; top:60px; left:40px; background:rgba(255,255,255,0.85); padding:6px; border-radius:4px;">
+    Traídos: {{ pokemons.length }}
+  </div>
+
+  <!-- Mostrar JSON crudo para validar forma de datos -->
+  <pre *ngIf="pokemons.length" style="position:absolute; top:100px; left:40px; max-width:400px; background:#fff; padding:10px; border-radius:6px; overflow:auto;">
+{{ pokemons | json }}
+  </pre>
+
+  <!-- Render de Targets (máx 4) -->
+  <ng-container *ngIf="pokemons?.length">
+    <div *ngFor="let p of pokemons; let i = index"
+         class="TargerBorder"
+         [style.top.px]="100 + i * 120"
+         [style.left.px]="27">
+      <div class="Content">
+        <div class="Targert"></div>
+        <div class="CardPhoto">
+          <img [src]="p.image || 'assets/pokeball.png'" alt="{{p.name}}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;" />
+        </div>
+        <p class="CardID">#{{p.id}}</p>
+        <h2 class="CardName">{{p.name}}</h2>
+      </div>
+    </div>
+  </ng-container>
+
 </div>
 
 
