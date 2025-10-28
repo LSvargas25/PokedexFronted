@@ -101,35 +101,48 @@ border-radius: 4px;
   text-transform: capitalize;
 }
 
-.F{
-  position: absolute;
-  display: flex;
-  align-items: center;
-  left: 150px;
-  margin: 0;
-  font-size: 12px;
-  top: 50px;
-  font-weight: bold;
-}
+
 .G{
   position: absolute;
   display: flex;
   align-items: center;
-  left: 238px;
+  left: 260px;
   margin: 0;
   font-size: 12px;
-  top: 60px;
+  top: 50px;
   font-weight: bold;
 }
 .T{
   position: absolute;
   display: flex;
   align-items: center;
-  left: 80px;
+  left: 60px;
   margin: 0;
   font-size: 12px;
-  top: 60px;
+  top: 50px;
   font-weight: bold;
 }
 
-
+.Type {
+  position: absolute;
+  left: 37px;
+  top: 70px;
+  width: 80px;
+  height: 22px;
+  font-size: 12px;
+  text-transform: capitalize;
+  text-align: center;
+  border-radius: 4px;
+  display: flex;
+}
+.Generation {
+  position: absolute;
+  left: 250px;
+  top: 70px;
+  width: 80px;
+  height: 22px;
+  font-size: 12px;
+  border-radius: 4px;
+  display: flex;
+  text-align: center;
+}

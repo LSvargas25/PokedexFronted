@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 import { PokemonService, Pokemon } from '../../../../../Services/Pokemons/pokemon-service';
 import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 
 @Component({
   selector: 'app-ascreen-pokemon-search',
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule],
   standalone: true,
   templateUrl: './ascreen-pokemon-search.html',
   styleUrls: ['./ascreen-pokemon-search.scss']
@@ -15,9 +16,24 @@ export class AScreenPokemonSearch implements OnInit {
   AScreen = true;
   Targets = true;
   FilterBy = true;
+
+  // Listas de filtros
+  generations: number[] = [1,2,3,4,5,6,7,8,9];
+  types: string[] = [
+    'normal','fire','water','electric','grass','ice','fighting','poison',
+    'ground','flying','psychic','bug','rock','ghost','dragon','dark','steel','fairy'
+  ];
+
+  // Selección actual
+  selectedGeneration: number | null = null;
+  selectedType: string | null = null;
+  searchTerm = '';
+
   pokemons: Pokemon[] = [];
-  displayedPokemons: Pokemon[] = []; // los 4 visibles
-  currentIndex = 0; // índice inicial del primer pokemon visible
+  filteredPokemons: Pokemon[] = [];
+  displayedPokemons: Pokemon[] = [];
+  currentIndex = 0;
+
   loading = false;
   error: string | null = null;
 
@@ -32,29 +48,65 @@ export class AScreenPokemonSearch implements OnInit {
     this.loadPokemons();
   }
 
+  // Carga desde backend con filtros (generation/type)
   loadPokemons(): void {
     this.loading = true;
     this.error = null;
-    console.log('Solicitando pokemons...');
-    // Traemos más pokemons para hacer scroll (ej. 20)
-    this.pokemonService.getPokemons(20, 0).subscribe({
+    const limit = 200;
+    const offset = 0;
+
+    this.pokemonService.getPokemonsFiltered(limit, offset, {
+      generation: this.selectedGeneration,
+      type: this.selectedType
+    }).subscribe({
       next: (data) => {
-        console.log('Pokemons recibidos desde servicio:', data);
         this.pokemons = data || [];
-        this.updateDisplayed();
+        this.currentIndex = 0;
+        // 🔧 FIX: Aplicar filtros después de recibir datos
+        this.applyClientFilters();
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error cargando pokemons', err);
         this.error = err?.message || 'Error al cargar pokemons';
+        this.pokemons = [];
+        this.filteredPokemons = [];
+        this.displayedPokemons = [];
         this.loading = false;
       }
     });
   }
 
+  // Filtro local por nombre (searchTerm)
+  applyClientFilters(): void {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (term) {
+      this.filteredPokemons = this.pokemons.filter(p =>
+        p.name.toLowerCase().includes(term)
+      );
+    } else {
+      // 🔧 FIX: Usar slice para crear nueva referencia
+      this.filteredPokemons = [...this.pokemons];
+    }
+    this.currentIndex = 0;
+    this.updateDisplayed();
+  }
+
   updateDisplayed(): void {
-    // Muestra 10 pokemons a partir de currentIndex
-    this.displayedPokemons = this.pokemons.slice(this.currentIndex, this.currentIndex + 10);
+    this.displayedPokemons = this.filteredPokemons.slice(
+      this.currentIndex,
+      this.currentIndex + 10
+    );
+  }
+
+  onFilterChange(): void {
+    this.searchTerm = ''; // 🔧 FIX: Limpiar búsqueda al cambiar filtros
+    this.currentIndex = 0;
+    this.loadPokemons();
+  }
+
+  onSearchTermChange(): void {
+    this.currentIndex = 0;
+    this.applyClientFilters();
   }
 
   scrollUp(): void {
@@ -65,13 +117,12 @@ export class AScreenPokemonSearch implements OnInit {
   }
 
   scrollDown(): void {
-    if (this.currentIndex < this.pokemons.length - 10) {
+    if (this.currentIndex < Math.max(0, this.filteredPokemons.length - 10)) {
       this.currentIndex++;
       this.updateDisplayed();
     }
   }
 
-  // Detectar teclas de flecha
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ArrowUp') {
@@ -83,12 +134,10 @@ export class AScreenPokemonSearch implements OnInit {
     }
   }
 
-  // Selección de Pokémon
   onSelectPokemon(pokemon: Pokemon): void {
     this.pokemonSelected.setSelected(pokemon);
   }
 
-  // Mouse hover: detectar posición y scroll automático
   onMouseMove(event: MouseEvent, container: HTMLElement): void {
     const rect = container.getBoundingClientRect();
     const y = event.clientY - rect.top;
@@ -108,14 +157,11 @@ export class AScreenPokemonSearch implements OnInit {
   }
 
   private startAutoScroll(direction: 'up' | 'down'): void {
-    if (this.scrollInterval) return; // ya está scrolleando
+    if (this.scrollInterval) return;
     this.scrollInterval = setInterval(() => {
-      if (direction === 'up') {
-        this.scrollUp();
-      } else {
-        this.scrollDown();
-      }
-    }, 200); // velocidad de scroll (200ms)
+      if (direction === 'up') this.scrollUp();
+      else this.scrollDown();
+    }, 200);
   }
 
   private stopAutoScroll(): void {
@@ -124,7 +170,4 @@ export class AScreenPokemonSearch implements OnInit {
       this.scrollInterval = null;
     }
   }
-
-
-
 }

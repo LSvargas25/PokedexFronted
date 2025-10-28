@@ -1,23 +1,40 @@
 <div class="Screen" *ngIf="AScreen" >
   <div class="border"></div>
 
-<div *ngIf="FilterBy" class="Filter">
- <p class="F">Filter by</p>
- <p class="G">Generation:</p>
- <p class="T">Type:</p>
+  <div *ngIf="FilterBy" class="Filter">
 
+    <p class="G">Generation:</p>
+    <p class="T">Type:</p>
 
+    <!-- Select Generación -->
+    <select
+      [(ngModel)]="selectedGeneration"
+      (change)="onFilterChange()"
+       class="Generation">
+      <option [ngValue]="null">All</option>
+      <option *ngFor="let g of generations" [ngValue]="g">Gen {{ g }}</option>
+    </select>
 
-</div>
+    <!-- Select Tipo -->
+    <select
+      [(ngModel)]="selectedType"
+      (change)="onFilterChange()"
+      class="Type"
+    >
+      <option [ngValue]="null">All</option>
+      <option *ngFor="let t of types" [ngValue]="t">{{ t }}</option>
+    </select>
+  </div>
 
   <div class="BorderImput">
     <input class="ImputText"
       type="text"
       placeholder="Search a pokemon..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearchTermChange()"
     />
   </div>
 
-  <!-- Lista de Targets con detección de mouse -->
   <div class="TargetsContainer"
        (mousemove)="onMouseMove($event, targetsDiv)"
        (mouseleave)="onMouseLeave()"
