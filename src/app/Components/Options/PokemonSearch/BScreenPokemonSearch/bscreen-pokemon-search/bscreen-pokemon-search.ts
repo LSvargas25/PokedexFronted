@@ -1,14 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/pokemon-selected';
+
 
 @Component({
   selector: 'app-bscreen-pokemon-search',
   imports: [CommonModule],
-    standalone:true,
+  standalone: true,
   templateUrl: './bscreen-pokemon-search.html',
-  styleUrl: './bscreen-pokemon-search.scss'
+  styleUrls: ['./bscreen-pokemon-search.scss']
 })
 export class BScreenPokemonSearch {
+  Ison = true;
 
-  Ison=true
+  get selectedPokemon$() { return this.pokemonSelected.selectedPokemon$; }
+
+  constructor(private pokemonSelected: PokemonSelected) {}
 }

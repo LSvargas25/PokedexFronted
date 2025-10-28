@@ -13,10 +13,9 @@
        (mousemove)="onMouseMove($event, targetsDiv)"
        (mouseleave)="onMouseLeave()"
        #targetsDiv>
-    <div *ngFor="let p of displayedPokemons" class="DisplayCard">
-
+    <div *ngFor="let p of displayedPokemons" class="DisplayCard" (click)="onSelectPokemon(p)" style="cursor: pointer;">
       <div class="Targert"></div>
-      <div class="Content"a>
+      <div class="Content">
         <div class="CardPhoto">
           <img [src]="p.image" [alt]="p.name" />
         </div>

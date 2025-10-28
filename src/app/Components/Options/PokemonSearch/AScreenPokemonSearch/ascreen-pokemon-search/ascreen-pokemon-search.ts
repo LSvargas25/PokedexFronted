@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { PokemonService, Pokemon } from '../../../../../Services/Pokemons/pokemon-service';
+import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/pokemon-selected';
 
 @Component({
   selector: 'app-ascreen-pokemon-search',
@@ -22,7 +23,10 @@ export class AScreenPokemonSearch implements OnInit {
 
   private scrollInterval: any;
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(
+    private pokemonService: PokemonService,
+    private pokemonSelected: PokemonSelected
+  ) {}
 
   ngOnInit(): void {
     this.loadPokemons();
@@ -79,18 +83,20 @@ export class AScreenPokemonSearch implements OnInit {
     }
   }
 
+  // Selección de Pokémon
+  onSelectPokemon(pokemon: Pokemon): void {
+    this.pokemonSelected.setSelected(pokemon);
+  }
+
   // Mouse hover: detectar posición y scroll automático
   onMouseMove(event: MouseEvent, container: HTMLElement): void {
     const rect = container.getBoundingClientRect();
     const y = event.clientY - rect.top;
     const height = rect.height;
 
-    // Si está en el tercio superior, scroll hacia arriba
     if (y < height * 0.25) {
       this.startAutoScroll('up');
-    }
-    // Si está en el tercio inferior, scroll hacia abajo
-    else if (y > height * 0.75) {
+    } else if (y > height * 0.75) {
       this.startAutoScroll('down');
     } else {
       this.stopAutoScroll();

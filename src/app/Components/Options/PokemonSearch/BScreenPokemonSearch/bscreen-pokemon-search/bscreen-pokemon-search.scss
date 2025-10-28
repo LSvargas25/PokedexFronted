@@ -1,18 +1,73 @@
- .Screen {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 100%;
-   width: 100%;
- }
+.Screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
 .Border {
-   position: absolute;
-   top: 0;
-   left: 0;
-   height: 100%;
-   width: 100%;;
-   border: 2px solid gray;
-   box-sizing: border-box;
- }
+  position: absolute;
+  height: 440px;
+  width: 440px;
+  border: 2px solid gray;
+  border-radius: 4px;
+}
+
+.CardDetail{
+  position: absolute;
+  top: 160px;
+  left: -146px;
+  height: 160px;
+  width: 410px;
+  border: 2px solid rgba(128, 128, 128, 0.295);
+  border-radius: 4px;
+
+}
+
+/* Marco fijo para mantener tamaño y posición constantes */
+.PhotoFrame {
+  position: absolute;
+  top: -210px;     /* ajusta si necesitas mover el marco */
+  left: -110px;     /* ajusta si necesitas mover el marco */
+  width: 240px;    /* tamaño uniforme (más grande que antes) */
+  height: 260px;
+  display: flex;
+  object-fit: fill;
+  place-items: center;
+  overflow: hidden; /* oculta el exceso al aplicar zoom */
+
+}
+
+/* La imagen ocupa el marco, centrada, con algo de zoom */
+.BigPhoto {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* mantiene proporción sin deformar */
+  transform: scale(1.15);   /* “un poco más de zoom” */
+  transform-origin: center;
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+
+
+}
+
+.Info {
+  text-align: center;
+  top: 70px;
+  position: absolute;
+  border: #7777774f 2px solid;
+  width: 396px;
+  height: 130px;
+  left: -200px;
+  border-radius: 20px;
+}
+
+.Hint {
+  z-index: 1;
+  color: #777;
+}
 
 

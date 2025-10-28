@@ -8,6 +8,7 @@ import { AscreenPoked } from '../../Options/Poked/AScreen/ascreen-poked/ascreen-
 import { AScreenPokemonSearch } from '../../Options/PokemonSearch/AScreenPokemonSearch/ascreen-pokemon-search/ascreen-pokemon-search';
 import { ScreenTrainerInfo } from '../../Options/TrainerInfo/AScreenTrainer/screen-trainer-info/screen-trainer-info';
 import { Settings } from '../../Options/Settings/Settings/settings';
+import { PokemonSelected } from '../../../Services/Options/SearchPokemon/pokemon-selected';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
@@ -34,7 +35,8 @@ export class AScreen implements AfterViewInit {
 
   constructor(
     private screenService: ScreenService,
-    private pokedService: PokedService
+    private pokedService: PokedService,
+    private pokemonSelected: PokemonSelected // inyectar el servicio
   ) {
     // Escucha estado de la pantalla (encendido/apagado)
     this.screenService.screenState$.subscribe(state => {
@@ -83,6 +85,10 @@ export class AScreen implements AfterViewInit {
 
   /** 🔴 Animación de apagado (cerrar cortina) */
   private stopScreen() {
+    this.showBackDiv = false;
+    this.currentComponent = null;
+    this.currentVideo = '';
+    this.pokemonSelected.reset(); // Resetear pokemon seleccionado
     const splitEl = this.blackSplit.nativeElement;
     const top = splitEl.querySelector('.black-top') as HTMLElement;
     const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
@@ -204,6 +210,7 @@ export class AScreen implements AfterViewInit {
 
   goBack() {
     this.pokedService.reset();
+    this.pokemonSelected.reset(); // Resetear pokemon seleccionado
     this.currentComponent = null;
     this.showBack = false;
     this.showBackDiv =false;

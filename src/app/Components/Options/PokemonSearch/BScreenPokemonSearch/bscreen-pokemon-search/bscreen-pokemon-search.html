@@ -1,6 +1,19 @@
 <div *ngIf="Ison" class="Screen">
-<div class="Border"></div>
- <div>
+  <div class="Border"></div>
 
+  <ng-container *ngIf="selectedPokemon$ | async as sp; else empty">
+    <div class="BigCard">
+      <div class="PhotoFrame">
+        <img class="BigPhoto" [src]="sp.image" [alt]="sp.name" draggable="false" />
+      </div>
+      <div class="Info">
+        <p class="CardID">#{{ sp.id }}</p>
+        <h1 class="CardName">{{ sp.name | uppercase }}</h1>
+      </div>
+    </div>
+  </ng-container>
 
- </div>
+  <ng-template #empty>
+    <p class="Hint">Choose a pokemon </p>
+  </ng-template>
+</div>
