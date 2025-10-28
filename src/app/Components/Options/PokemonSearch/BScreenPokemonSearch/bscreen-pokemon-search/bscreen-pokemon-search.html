@@ -50,16 +50,16 @@
 
       <!-- 🟩 Página 2: Habilidades y desventajas -->
       <div class="Page">
-        <h2 class="Title2">Abilities</h2>
-        <ul class="List">
+        <h2 class="TitleAbi">Abilities</h2>
+        <ul class="List1">
           <li *ngFor="let ab of p.abilities">
             {{ ab.name | titlecase }}
             <span *ngIf="ab.hidden">(Hidden)</span>
           </li>
         </ul>
 
-        <h2 class="Title2" style="margin-top: 30px;">Disadvantages</h2>
-        <ul class="List">
+        <h2 class="TitleDis" style="margin-top: 30px;">Disadvantages</h2>
+        <ul class="List2">
           <li *ngFor="let w of p.weaknesses">
             {{ w | titlecase }}
           </li>
