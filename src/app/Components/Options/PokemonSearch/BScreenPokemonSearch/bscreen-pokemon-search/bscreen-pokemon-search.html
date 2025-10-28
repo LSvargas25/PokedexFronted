@@ -1,19 +1,51 @@
 <div *ngIf="Ison" class="Screen">
-  <div class="Border"></div>
 
+
+  <!-- Verificamos si hay un Pokémon -->
   <ng-container *ngIf="selectedPokemon$ | async as sp; else empty">
-    <div class="BigCard">
-      <div class="PhotoFrame">
-        <img class="BigPhoto" [src]="sp.image" [alt]="sp.name" draggable="false" />
+
+    <!-- Contenedor de las 3 páginas -->
+    <div class="PagesContainer" [style.transform]="'translateX(-' + currentPage * 100 + '%)'">
+
+      <!-- Página 1 -->
+      <div class="Page">
+        <div class="BigCard">
+          <div class="PhotoFrame">
+            <img class="BigPhoto" [src]="sp.image" [alt]="sp.name" draggable="false" />
+          </div>
+          <div class="Info">
+            <p class="CardID">#{{ sp.id }}</p>
+            <h1 class="CardName">{{ sp.name | uppercase }}</h1>
+          </div>
+        </div>
       </div>
-      <div class="Info">
-        <p class="CardID">#{{ sp.id }}</p>
-        <h1 class="CardName">{{ sp.name | uppercase }}</h1>
+
+      <!-- Página 2 -->
+      <div class="Page">
+        <h2 class="Title">Página 2</h2>
+        <p>Aquí podrás agregar lo que quieras después</p>
+      </div>
+
+      <!-- Página 3 -->
+      <div class="Page">
+        <h2 class="Title3">Evolutions:</h2>
+
       </div>
     </div>
+
+    <!-- Dots -->
+    <div class="Dots">
+      <span *ngFor="let dot of [0, 1, 2]; let i = index"
+            (click)="setPage(i)"
+            [class.active]="i === currentPage"></span>
+    </div>
+
   </ng-container>
 
+  <!-- Si no hay Pokémon seleccionado -->
   <ng-template #empty>
-    <p class="Hint">Choose a pokemon </p>
+    <div class="EmptyState">
+      <p class="Hint">Choose a Pokémon</p>
+    </div>
   </ng-template>
 </div>

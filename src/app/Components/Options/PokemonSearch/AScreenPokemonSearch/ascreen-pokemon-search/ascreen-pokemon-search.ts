@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { PokemonService, Pokemon } from '../../../../../Services/Pokemons/pokemon-service';
+import { PokemonService,Pokemon } from '../../../../../Services/Pokemons/PokemonService/pokemon-service';
 import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 
 @Component({

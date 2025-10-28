@@ -16,4 +16,11 @@ export class BScreenPokemonSearch {
   get selectedPokemon$() { return this.pokemonSelected.selectedPokemon$; }
 
   constructor(private pokemonSelected: PokemonSelected) {}
+
+  currentPage = 0;
+
+setPage(index: number) {
+  this.currentPage = index;
+}
+
 }
