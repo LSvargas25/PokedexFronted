@@ -8,10 +8,10 @@
 </div>
 
 <!-- Pantalla principal -->
-<div *ngIf="Ison" class="Screen">
+<div *ngIf="Ison && pokemonData as p" class="Screen" [style.background]="getPokemonColor(p.types)">
 
   <!-- Si hay Pokémon seleccionado -->
-  <ng-container *ngIf="pokemonData; else empty">
+  <ng-container *ngIf="p; else empty">
 
     <!-- Contenedor de páginas -->
     <div
@@ -25,28 +25,25 @@
           <div class="PhotoFrame">
             <img
               class="BigPhoto"
-              [src]="pokemonData.image"
-              [alt]="pokemonData.name"
+              [src]="p.image"
+              [alt]="p.name"
               draggable="false"
             />
           </div>
           <div
             class="Info"
-            [ngStyle]="{ 'background': getPokemonColor(pokemonData.types) }"
+            [style.background]="getPokemonColor(p.types)"
           >
-            <p class="CardID" > ID: #{{ pokemonData.id }}</p>
-            <h1 class="CardName">{{ pokemonData.name | uppercase }}</h1>
-
-            <div class="Types">
-              <span *ngFor="let t of pokemonData.types"  class="TypeTag">
-                {{ t | titlecase }}
-              </span>
-            </div>
-
-            <div class="Stats">
-              <p>Height: {{ pokemonData.height / 10 }} m</p>
-              <p>Weight: {{ pokemonData.weight / 10 }} kg</p>
-            </div>
+            <p class="InfoRowID">ID: #{{ p.id }}</p>
+            <p class="InfoRowName"> {{ p.name | titlecase }}</p>
+            <p class="InfoRow">Type: {{ (p.types || []).join(', ') | titlecase }}</p>
+            <p class="InfoRow">Height: {{ p.height / 10 }} m</p>
+            <p class="InfoRowWeight">Weight: {{ p.weight / 10 }} kg</p>
+            <p class="Generation">
+              Generation:
+              {{ p.generation?.name | titlecase }}
+              <span *ngIf="p.generation?.number"> (Gen {{ p.generation?.number }})</span>
+            </p>
           </div>
         </div>
       </div>
@@ -55,7 +52,7 @@
       <div class="Page">
         <h2 class="Title2">Abilities</h2>
         <ul class="List">
-          <li *ngFor="let ab of pokemonData.abilities">
+          <li *ngFor="let ab of p.abilities">
             {{ ab.name | titlecase }}
             <span *ngIf="ab.hidden">(Hidden)</span>
           </li>
@@ -63,16 +60,16 @@
 
         <h2 class="Title2" style="margin-top: 30px;">Disadvantages</h2>
         <ul class="List">
-          <li *ngFor="let w of pokemonData.weaknesses">
+          <li *ngFor="let w of p.weaknesses">
             {{ w | titlecase }}
           </li>
         </ul>
 
         <img
           class="Photo"
-          [ngStyle]="{ 'background': getPokemonColor(pokemonData.types) }"
-          [src]="pokemonData.image"
-          [alt]="pokemonData.name"
+          [style.background]="getPokemonColor(p.types)"
+          [src]="p.image"
+          [alt]="p.name"
         />
       </div>
 
@@ -82,7 +79,7 @@
 
         <div class="Evolutions">
           <div
-            *ngFor="let evo of pokemonData.evolution"
+            *ngFor="let evo of p.evolution"
             class="EvolutionItem"
           >
             <p>{{ evo.name | titlecase }}</p>

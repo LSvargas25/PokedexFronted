@@ -12,6 +12,7 @@ export interface PokemonFullData {
   abilities: { name: string; hidden: boolean }[];
   weaknesses: string[];
   evolution: { name: string }[];
+  generation: { name: string | null; number: number | null }; // ← actualizado
 }
 
 @Injectable({
