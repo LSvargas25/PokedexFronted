@@ -49,32 +49,35 @@ export class AScreenPokemonSearch implements OnInit {
   }
 
   // Carga desde backend con filtros (generation/type)
-  loadPokemons(): void {
-    this.loading = true;
-    this.error = null;
-    const limit = 200;
-    const offset = 0;
+loadPokemons(): void {
+  this.loading = true;
+  this.error = null;
+  const limit = 200;
+  const offset = 0;
 
-    this.pokemonService.getPokemonsFiltered(limit, offset, {
-      generation: this.selectedGeneration,
-      type: this.selectedType
-    }).subscribe({
-      next: (data) => {
-        this.pokemons = data || [];
-        this.currentIndex = 0;
-        // 🔧 FIX: Aplicar filtros después de recibir datos
-        this.applyClientFilters();
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err?.message || 'Error al cargar pokemons';
-        this.pokemons = [];
-        this.filteredPokemons = [];
-        this.displayedPokemons = [];
-        this.loading = false;
-      }
-    });
-  }
+  this.pokemonService.getPokemonsFiltered(limit, offset, {
+    generation: this.selectedGeneration,
+    type: this.selectedType
+  }).subscribe({
+    next: (data) => {
+      this.pokemons = data || [];
+      this.currentIndex = 0;
+
+      // 🔹 Siempre aplicar filtros locales, incluso si no hay searchTerm
+      this.applyClientFilters();
+
+      this.loading = false;
+    },
+    error: (err) => {
+      this.error = err?.message || 'Error al cargar pokemons';
+      this.pokemons = [];
+      this.filteredPokemons = [];
+      this.displayedPokemons = [];
+      this.loading = false;
+    }
+  });
+}
+
 
  private readonly PokemonTypeColors: Record<string, string> = {
   normal: '#A8A77A',
@@ -109,18 +112,16 @@ getPokemonColor(types: string[]): string {
 
   // Filtro local por nombre (searchTerm)
   applyClientFilters(): void {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (term) {
-      this.filteredPokemons = this.pokemons.filter(p =>
-        p.name.toLowerCase().includes(term)
-      );
-    } else {
-      // 🔧 FIX: Usar slice para crear nueva referencia
-      this.filteredPokemons = [...this.pokemons];
-    }
-    this.currentIndex = 0;
-    this.updateDisplayed();
-  }
+  const term = this.searchTerm.trim().toLowerCase();
+
+  this.filteredPokemons = term
+    ? this.pokemons.filter(p => p.name.toLowerCase().includes(term))
+    : [...this.pokemons]; // 🔹 siempre clonar el array
+
+  this.currentIndex = 0;
+  this.updateDisplayed(); // 🔹 actualizar la vista siempre
+}
+
 
   updateDisplayed(): void {
     this.displayedPokemons = this.filteredPokemons.slice(
