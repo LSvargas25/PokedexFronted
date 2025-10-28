@@ -1,5 +1,5 @@
 import { Component, ElementRef, AfterViewInit, ViewChild, ChangeDetectorRef, Type } from '@angular/core';
-import { ScreenService } from '../../../../Services/On-OFF Service/screen-service';
+import { ScreenService } from '../../../../Services/Pokedex/On-OFF Service/screen-service';
 import { gsap } from 'gsap';
 import { PokedService } from '../../../../Services/Screens/poked-screen-state';
 import { BScreenPoked } from '../../../Options/Poked/BScreen/bscreen-poked/bscreen-poked';

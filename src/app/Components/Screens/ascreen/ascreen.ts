@@ -2,13 +2,13 @@ import { Component, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
-import { ScreenService } from '../../../Services/On-OFF Service/screen-service';
+import { ScreenService } from '../../../Services/Pokedex/On-OFF Service/screen-service';
 import { PokedService } from '../../../Services/Screens/poked-screen-state';
 import { AscreenPoked } from '../../Options/Poked/AScreen/ascreen-poked/ascreen-poked';
 import { AScreenPokemonSearch } from '../../Options/PokemonSearch/AScreenPokemonSearch/ascreen-pokemon-search/ascreen-pokemon-search';
 import { ScreenTrainerInfo } from '../../Options/TrainerInfo/AScreenTrainer/screen-trainer-info/screen-trainer-info';
 import { Settings } from '../../Options/Settings/Settings/settings';
-import { PokemonSelected } from '../../../Services/Options/SearchPokemon/pokemon-selected';
+import { PokemonSelected } from '../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 @Component({
   selector: 'app-ascreen',
   standalone: true,

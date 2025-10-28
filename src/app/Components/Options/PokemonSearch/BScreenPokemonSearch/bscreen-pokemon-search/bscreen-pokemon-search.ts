@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/pokemon-selected';
+import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 
 
 @Component({

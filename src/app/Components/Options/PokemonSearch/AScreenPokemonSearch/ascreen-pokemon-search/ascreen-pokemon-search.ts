@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { PokemonService, Pokemon } from '../../../../../Services/Pokemons/pokemon-service';
-import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/pokemon-selected';
+import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 
 @Component({
   selector: 'app-ascreen-pokemon-search',
@@ -14,7 +14,7 @@ import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/p
 export class AScreenPokemonSearch implements OnInit {
   AScreen = true;
   Targets = true;
-
+  FilterBy = true;
   pokemons: Pokemon[] = [];
   displayedPokemons: Pokemon[] = []; // los 4 visibles
   currentIndex = 0; // índice inicial del primer pokemon visible
@@ -124,4 +124,7 @@ export class AScreenPokemonSearch implements OnInit {
       this.scrollInterval = null;
     }
   }
+
+
+
 }
