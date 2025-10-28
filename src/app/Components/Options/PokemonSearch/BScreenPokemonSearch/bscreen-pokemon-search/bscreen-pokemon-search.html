@@ -1,3 +1,9 @@
+  <!-- Dots -->
+    <div class="Dots">
+      <span *ngFor="let dot of [0, 1, 2]; let i = index"
+            (click)="setPage(i)"
+            [class.active]="i === currentPage"></span>
+    </div>
 <div *ngIf="Ison" class="Screen">
 
 
@@ -13,7 +19,7 @@
           <div class="PhotoFrame">
             <img class="BigPhoto" [src]="sp.image" [alt]="sp.name" draggable="false" />
           </div>
-          <div class="Info">
+          <div class="Info" [ngStyle]="{'background': getPokemonColor(sp.types)}" >
             <p class="CardID">#{{ sp.id }}</p>
             <h1 class="CardName">{{ sp.name | uppercase }}</h1>
           </div>
@@ -22,8 +28,9 @@
 
       <!-- Página 2 -->
       <div class="Page">
-        <h2 class="Title">Página 2</h2>
-        <p>Aquí podrás agregar lo que quieras después</p>
+       <h2 style="left: -140px;font-size: medium; position: relative; top: -80px;" > Abilities:</h2>
+       <h2 style="left: -120px;font-size: medium; position: relative; top:  40px;" > Disadvantages:</h2>
+       <img class="Photo" [ngStyle]="{'background': getPokemonColor(sp.types)}" [src]="sp.image" [alt]="sp.name"  />
       </div>
 
       <!-- Página 3 -->
@@ -33,12 +40,7 @@
       </div>
     </div>
 
-    <!-- Dots -->
-    <div class="Dots">
-      <span *ngFor="let dot of [0, 1, 2]; let i = index"
-            (click)="setPage(i)"
-            [class.active]="i === currentPage"></span>
-    </div>
+
 
   </ng-container>
 
