@@ -1,47 +1,95 @@
-  <!-- Dots -->
-    <div class="Dots">
-      <span *ngFor="let dot of [0, 1, 2]; let i = index"
-            (click)="setPage(i)"
-            [class.active]="i === currentPage"></span>
-    </div>
+<!-- 🔘 Dots para cambiar de página -->
+<div class="Dots">
+  <span
+    *ngFor="let dot of [0, 1, 2]; let i = index"
+    (click)="setPage(i)"
+    [class.active]="i === currentPage"
+  ></span>
+</div>
+
+<!-- Pantalla principal -->
 <div *ngIf="Ison" class="Screen">
 
+  <!-- Si hay Pokémon seleccionado -->
+  <ng-container *ngIf="pokemonData; else empty">
 
-  <!-- Verificamos si hay un Pokémon -->
-  <ng-container *ngIf="selectedPokemon$ | async as sp; else empty">
+    <!-- Contenedor de páginas -->
+    <div
+      class="PagesContainer"
+      [style.transform]="'translateX(-' + currentPage * 100 + '%)'"
+    >
 
-    <!-- Contenedor de las 3 páginas -->
-    <div class="PagesContainer" [style.transform]="'translateX(-' + currentPage * 100 + '%)'">
-
-      <!-- Página 1 -->
+      <!--  Página 1: Información general -->
       <div class="Page">
         <div class="BigCard">
           <div class="PhotoFrame">
-            <img class="BigPhoto" [src]="sp.image" [alt]="sp.name" draggable="false" />
+            <img
+              class="BigPhoto"
+              [src]="pokemonData.image"
+              [alt]="pokemonData.name"
+              draggable="false"
+            />
           </div>
-          <div class="Info" [ngStyle]="{'background': getPokemonColor(sp.types)}" >
-            <p class="CardID">#{{ sp.id }}</p>
-            <h1 class="CardName">{{ sp.name | uppercase }}</h1>
+          <div
+            class="Info"
+            [ngStyle]="{ 'background': getPokemonColor(pokemonData.types) }"
+          >
+            <p class="CardID" > ID: #{{ pokemonData.id }}</p>
+            <h1 class="CardName">{{ pokemonData.name | uppercase }}</h1>
+
+            <div class="Types">
+              <span *ngFor="let t of pokemonData.types"  class="TypeTag">
+                {{ t | titlecase }}
+              </span>
+            </div>
+
+            <div class="Stats">
+              <p>Height: {{ pokemonData.height / 10 }} m</p>
+              <p>Weight: {{ pokemonData.weight / 10 }} kg</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Página 2 -->
+      <!-- 🟩 Página 2: Habilidades y desventajas -->
       <div class="Page">
-       <h2 style="left: -140px;font-size: medium; position: relative; top: -80px;" > Abilities:</h2>
-       <h2 style="left: -120px;font-size: medium; position: relative; top:  40px;" > Disadvantages:</h2>
-       <img class="Photo" [ngStyle]="{'background': getPokemonColor(sp.types)}" [src]="sp.image" [alt]="sp.name"  />
+        <h2 class="Title2">Abilities</h2>
+        <ul class="List">
+          <li *ngFor="let ab of pokemonData.abilities">
+            {{ ab.name | titlecase }}
+            <span *ngIf="ab.hidden">(Hidden)</span>
+          </li>
+        </ul>
+
+        <h2 class="Title2" style="margin-top: 30px;">Disadvantages</h2>
+        <ul class="List">
+          <li *ngFor="let w of pokemonData.weaknesses">
+            {{ w | titlecase }}
+          </li>
+        </ul>
+
+        <img
+          class="Photo"
+          [ngStyle]="{ 'background': getPokemonColor(pokemonData.types) }"
+          [src]="pokemonData.image"
+          [alt]="pokemonData.name"
+        />
       </div>
 
-      <!-- Página 3 -->
+      <!-- 🟦 Página 3: Evoluciones -->
       <div class="Page">
-        <h2 class="Title3">Evolutions:</h2>
+        <h2 class="Title3">Evolutions</h2>
 
+        <div class="Evolutions">
+          <div
+            *ngFor="let evo of pokemonData.evolution"
+            class="EvolutionItem"
+          >
+            <p>{{ evo.name | titlecase }}</p>
+          </div>
+        </div>
       </div>
     </div>
-
-
-
   </ng-container>
 
   <!-- Si no hay Pokémon seleccionado -->

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
-
+import { PokemonDetailService,PokemonFullData } from '../../../../../Services/Pokemons/PokemonDetailService/pokemon-detail-service';
 
 @Component({
   selector: 'app-bscreen-pokemon-search',
@@ -10,12 +10,25 @@ import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/P
   templateUrl: './bscreen-pokemon-search.html',
   styleUrls: ['./bscreen-pokemon-search.scss']
 })
-export class BScreenPokemonSearch {
+export class BScreenPokemonSearch implements OnInit {
   Ison = true;
-
+pokemonData: PokemonFullData | null = null;
   get selectedPokemon$() { return this.pokemonSelected.selectedPokemon$; }
 
-  constructor(private pokemonSelected: PokemonSelected) {}
+  constructor(private pokemonSelected: PokemonSelected, private detailService: PokemonDetailService) {}
+
+  ngOnInit() {
+     this.pokemonSelected.selectedPokemon$.subscribe(pokemon => {
+      if (pokemon) {
+        // Pedimos datos completos solo del Pokémon seleccionado
+        this.detailService.getPokemonFullData(pokemon.name).subscribe(data => {
+          this.pokemonData = data;
+        });
+      } else {
+        this.pokemonData = null; // no hay Pokémon seleccionado
+      }
+    });
+  }
 
   currentPage = 0;
 
