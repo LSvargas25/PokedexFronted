@@ -4,9 +4,11 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 export interface Pokemon {
+[x: string]: any;
   id: number;
   name: string;
   image: string;
+  types: string[];
 }
 
 @Injectable({
@@ -57,6 +59,7 @@ export class PokemonService {
     );
   }
 
+
   getPokemons(limit = 10, offset = 0): Observable<Pokemon[]> {
     const params = new HttpParams()
       .set('limit', String(limit))
@@ -71,17 +74,21 @@ export class PokemonService {
     );
   }
 
+
+
+
   // Helper para mapear la respuesta del backend o PokeAPI
-  private mapToPokemons(res: any): Pokemon[] {
-    if (Array.isArray(res)) return res as Pokemon[];
-    if (res && Array.isArray(res.pokemons)) return res.pokemons as Pokemon[];
-    if (res && res.results) {
-      return res.results.map((p: any) => ({
-        id: p.id ?? null,
-        name: p.name,
-        image: p.image ?? (p.sprites?.front_default ?? null)
-      })) as Pokemon[];
+    private mapToPokemons(res: any): Pokemon[] {
+      if (Array.isArray(res)) return res as Pokemon[];
+      if (res && Array.isArray(res.pokemons)) return res.pokemons as Pokemon[];
+      if (res && res.results) {
+        return res.results.map((p: any) => ({
+          id: p.id ?? null,
+          name: p.name,
+          image: p.image ?? (p.sprites?.front_default ?? null),
+          types: p.types ?? []
+        })) as Pokemon[];
+      }
+      return [];
     }
-    return [];
-  }
 }

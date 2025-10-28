@@ -76,6 +76,37 @@ export class AScreenPokemonSearch implements OnInit {
     });
   }
 
+ private readonly PokemonTypeColors: Record<string, string> = {
+  normal: '#A8A77A',
+  fire: '#EE8130',
+  water: '#6390F0',
+  electric: '#F7D02C',
+  grass: '#7AC74C',
+  ice: '#96D9D6',
+  fighting: '#C22E28',
+  poison: '#A33EA1',
+  ground: '#E2BF65',
+  flying: '#A98FF3',
+  psychic: '#F95587',
+  bug: '#A6B91A',
+  rock: '#B6A136',
+  ghost: '#735797',
+  dragon: '#6F35FC',
+  dark: '#705746',
+  steel: '#B7B7CE',
+  fairy: '#D685AD'
+};
+getPokemonColor(types: string[]): string {
+  if (!types || types.length === 0) return '#ccc';
+  if (types.length === 1) return this.PokemonTypeColors[types[0]] || '#ccc';
+
+  // Si tiene 2 tipos, hacemos un gradiente
+  const color1 = this.PokemonTypeColors[types[0]] || '#ccc';
+  const color2 = this.PokemonTypeColors[types[1]] || '#eee';
+  return `linear-gradient(135deg, ${color1}, ${color2})`;
+}
+
+
   // Filtro local por nombre (searchTerm)
   applyClientFilters(): void {
     const term = this.searchTerm.trim().toLowerCase();

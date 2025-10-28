@@ -39,7 +39,10 @@
        (mousemove)="onMouseMove($event, targetsDiv)"
        (mouseleave)="onMouseLeave()"
        #targetsDiv>
-    <div *ngFor="let p of displayedPokemons" class="DisplayCard" (click)="onSelectPokemon(p)" style="cursor: pointer;">
+    <div *ngFor="let p of displayedPokemons" class="DisplayCard"
+       [ngStyle]="{'background': getPokemonColor(p.types)}"
+         (click)="onSelectPokemon(p)"
+      style="cursor: pointer;">
       <div class="Targert"></div>
       <div class="Content">
         <div class="CardPhoto">
