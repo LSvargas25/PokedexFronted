@@ -71,9 +71,9 @@
 /* Contenedor interno Page 1 */
 /* Marco circular con efecto cristal */
 .PhotoFrame {
-  position: absolute;
-  top: 5px;
-  left: 200px;
+ position: absolute;
+  top: 10px;
+  left: 220px;
   width: 220px;
   height: 220px;
   display: flex;
@@ -88,16 +88,30 @@
     inset 0 -5px 15px rgba(0, 0, 0, 0.35),
     0 5px 20px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
-  transition: transform 0.3s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: float 4s ease-in-out infinite;
+}
+/* Animación flotante tipo "respiración" */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
 }
 
+/* Brillo dinámico al pasar el mouse */
 .PhotoFrame:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5),
+  transform: scale(1.08);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
     inset 0 5px 15px rgba(255, 255, 255, 0.5),
     inset 0 -5px 15px rgba(0, 0, 0, 0.5);
-    z-index: 10;
+  filter: brightness(1.1);
+  z-index: 10;
 }
+
 
 /* Imagen dentro del marco */
 .BigPhoto {
@@ -108,6 +122,24 @@
   transform: scale(1.15);
   pointer-events: none;
   user-select: none;
+  animation: photoPulse 3.5s ease-in-out infinite;
+}
+
+@keyframes photoPulse {
+  0%, 100% {
+    filter: brightness(1);
+    transform: scale(1.12);
+  }
+  50% {
+    filter: brightness(1.2);
+    transform: scale(1.15);
+  }
+}
+/* Reflejo animado que recorre el borde */
+@keyframes glint {
+  0% { transform: translate(-20%, -20%) rotate(0deg); opacity: 0.3; }
+  50% { transform: translate(15%, 10%) rotate(10deg); opacity: 0.8; }
+  100% { transform: translate(-20%, -20%) rotate(0deg); opacity: 0.3; }
 }
 
 /* Reflejos de cristal */
@@ -122,6 +154,7 @@
   border-radius: 50%;
   filter: blur(3px);
   opacity: 0.7;
+  animation: glint 5s linear infinite;
 }
 
 .PhotoFrame::before {
@@ -147,9 +180,7 @@
   top: 240px;
   border-radius: 20px;
    font-size: 10px;
-
-  /* Estilo cristal (compatible con color dinámico si lo pones vía [style.background]) */
-  background: rgba(255,255,255,0.18);
+ background: rgba(255,255,255,0.18);
   border: 2px solid #ffffff70;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -162,13 +193,20 @@
   justify-content: center;
   gap: 4px;
   padding: 10px 16px;
-
+ transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: appear 0.8s ease-out forwards, infoBreath 5s ease-in-out infinite;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+@keyframes infoBreath {
+  0%, 100% {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  }
+  50% {
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
+  }
 }
 
-
-/* Reflejos tipo cristal para el contenedor de info */
+/* Reflejos del cristal animados */
 .Info::before,
 .Info::after {
   content: "";
@@ -186,6 +224,7 @@
   background: radial-gradient(circle, rgba(255,255,255,0.55), rgba(255,255,255,0.15) 60%, transparent 70%);
   filter: blur(2px);
   opacity: 0.85;
+  animation: shimmer 6s ease-in-out infinite;
 }
 
 .Info::after {
@@ -196,6 +235,12 @@
   background: radial-gradient(circle, rgba(255,255,255,0.35), transparent 70%);
   filter: blur(1.5px);
   opacity: 0.5;
+}
+
+/* Efecto brillo que se mueve sutilmente */
+@keyframes shimmer {
+  0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+  50% { transform: translate(10px, -10px); opacity: 0.9; }
 }
 
 /* Filas de información */
