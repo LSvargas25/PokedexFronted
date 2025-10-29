@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,OnInit } from '@angular/core';
+import { Component,HostListener,OnInit } from '@angular/core';
 import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 import { PokemonDetailService,PokemonFullData } from '../../../../../Services/Pokemons/PokemonDetailService/pokemon-detail-service';
 
@@ -14,6 +14,9 @@ export class BScreenPokemonSearch implements OnInit {
   Ison = true;
 pokemonData: PokemonFullData | null = null;
   get selectedPokemon$() { return this.pokemonSelected.selectedPokemon$; }
+
+  totalPages = 3; // cantidad de páginas visibles
+
 
   constructor(private pokemonSelected: PokemonSelected, private detailService: PokemonDetailService) {}
 
@@ -32,9 +35,25 @@ pokemonData: PokemonFullData | null = null;
 
   currentPage = 0;
 
-setPage(index: number) {
-  this.currentPage = index;
-}
+ setPage(index: number) {
+    this.currentPage = index;
+  }
+
+  // ✅ Avanzar / retroceder infinitamente
+  nextPage() {
+    this.currentPage = (this.currentPage + 1) % this.totalPages;
+  }
+
+  prevPage() {
+    this.currentPage = (this.currentPage - 1 + this.totalPages) % this.totalPages;
+  }
+
+  // ✅ Control por teclado
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboard(event: KeyboardEvent) {
+    if (event.key === 'ArrowRight') this.nextPage();
+    if (event.key === 'ArrowLeft') this.prevPage();
+  }
  private readonly PokemonTypeColors: Record<string, string> = {
   normal: '#A8A77A',
   fire: '#EE8130',
