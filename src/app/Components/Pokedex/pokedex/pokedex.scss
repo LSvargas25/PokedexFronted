@@ -196,7 +196,7 @@ border: 2px solid black;
 /*2 slide */
 .Slide{
   width: 600px;
-    height: 840px;
+    height: auto;
     position: relative;
     margin: 50px auto;
     overflow: visible;
@@ -434,4 +434,11 @@ left: 100px;
   }
 }
 
-
+.boxborderscrean-simple{
+  position: absolute;
+  top: -110px;
+  left: 77.5%;
+  width: 420px;
+  height: 460px;
+  z-index: 950;
+}
