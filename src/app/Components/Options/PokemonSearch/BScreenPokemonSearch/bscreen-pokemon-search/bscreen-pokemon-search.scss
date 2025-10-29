@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 /* Contenedor principal de la pantalla */
 .Screen {
   height: 430px;
@@ -64,7 +65,7 @@
 .PhotoFrame {
   position: absolute;
   top: 5px;
-  left: 100px;
+  left: 170px;
   width: 220px;
   height: 220px;
   display: flex;
@@ -134,9 +135,10 @@
   position: absolute;
   width: 350px;
   height: 140px;
-  left: 20px;
+  left: 80px;
   top: 240px;
   border-radius: 20px;
+   font-size: 10px;
 
   /* Estilo cristal (compatible con color dinámico si lo pones vía [style.background]) */
   background: rgba(255,255,255,0.18);
@@ -197,21 +199,22 @@
 }
 
 /* Filas de información */
-.InfoRow, .InfoRowID, .InfoRowName, .InfoRowWeight {
-  margin: 2px 0;
+.InfoRow, .InfoRowID, .InfoRowName {
+  margin: 4px 0;
   position: relative;
   font-weight: 600;
   color: #000000;
-  font-size: 14px;
+  font-size: 10px;
 }
 
 /* ID estilo pixel */
 .InfoRowID {
   font-family: "Press Start 2P", cursive;
-  font-size: 14px;
+  font-size: 10px;
   color: #000;
   text-shadow: 2px 2px 3px #ffffff;
-  top: 20px;
+  justify-items: center;
+  align-items: center;
   left: -120px;
   letter-spacing: 1px;
 }
@@ -229,56 +232,66 @@
 .InfoRow {
   flex-direction: row;
   display: flex;
-  font-size: 14px;
+  font-size: 10px;
   left: 30px;
    font-family: "Press Start 2P", cursive;
-
-}
-
-.InfoRowWeight {
-  top: -54px;
-  left: 90px;
-   font-family: "Press Start 2P", cursive;
-  font-size: 14px;
-}
-
-/* Generación */
-.Generation {
-  font-size: 12px;
-  font-weight: 600;
-  color: #000000;
-  position: absolute;
-  top: 105px;
-  left: 226px;
+justify-items: center;
+  align-items: center;
 }
 
 /* SecondPage*/
 /* Titulo*/
 .TitleAbi{
   position: relative;
-  top: 10px;
+  top: 15px;
   right: 120px;
 }
 .TitleDis{
   position: relative;
-  top: -30px;
+  top: -10px;
   right: 90px;
 }
+.TitleAbi, .TitleDis {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  color: #ffcb05; /* amarillo tipo Pokémon */
+  text-shadow: 2px 2px 0 #2a75bb; /* sombra azul */
+  margin-bottom: 10px;
+}
 .List1{
-  top: -20px;
+  top: 10px;
   border-radius: 4px;
+  left: -30px;
   width: 300px;
   height: 100%;
-  border: 2px solid rgb(0, 0, 0);
   position: relative;
 }
 .List2{
-  top: -50px;
+  top: -10px;
   border-radius: 4px;
   width: 300px;
   height: 100%;
-  border: 2px solid rgb(0, 0, 0);
   position: relative;
+  left: -30px;
+}
+.List1, .List2 {
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  border-radius: 12px;
+  border: 2px solid #2a75bb; /* borde azul Pokémon */
+  background: rgba(255,255,255,0.15); /* cristal semitransparente */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  width: 280px;
+}
+.List1 li, .List2 li {
+  margin-bottom: 6px;
+}
+.List1 li span {
+  font-size: 12px;
+  color: #ff0000; /* Hidden en rojo */
 }
 
 
@@ -290,11 +303,13 @@
   justify-content: center;
   align-items: center;
   width: 140px;
-  border-color: rgb(0, 0, 0) 2px solid;
   height: 140px;
   border-radius: 50%;
     transition: transform 0.3s ease;
     right: -100px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(0,0,0,0.1));
+  box-shadow: 0 0 15px rgba(42,117,187,0.7), inset 0 0 10px rgba(255,255,255,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 

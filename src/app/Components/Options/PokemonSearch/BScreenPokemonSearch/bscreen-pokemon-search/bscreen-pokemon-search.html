@@ -38,12 +38,8 @@
             <p class="InfoRowName"> {{ p.name | titlecase }}</p>
             <p class="InfoRow">Type: {{ (p.types || []).join(', ') | titlecase }}</p>
             <p class="InfoRow">Height: {{ p.height / 10 }} m</p>
-            <p class="InfoRowWeight">Weight: {{ p.weight / 10 }} kg</p>
-            <p class="Generation">
-              Generation:
-              {{ p.generation?.name | titlecase }}
-              <span *ngIf="p.generation?.number"> (Gen {{ p.generation?.number }})</span>
-            </p>
+            <p class="InfoRow">Weight: {{ p.weight / 10 }} kg</p>
+
           </div>
         </div>
       </div>
