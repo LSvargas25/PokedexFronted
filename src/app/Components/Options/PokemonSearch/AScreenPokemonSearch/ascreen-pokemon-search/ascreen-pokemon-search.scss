@@ -1,6 +1,6 @@
 .border, .ImputText{
  border-radius: 8px;
- border: 2px rgb(128, 124, 124) solid;
+ border: 2px rgb(0, 0, 0) solid;
 }
 
 .Screen{
@@ -21,8 +21,8 @@
   position: absolute;
   width: 140px;
   height: 45px;
-  top: 5px;
-  left: 105px;
+  top: 10px;
+  left: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,40 +33,41 @@
   text-align: center;
   height: 30px;
   font-size: 10px;
+  padding: 4px;
+  border: 2px solid #ccc;
+  box-shadow: inset 1px 1px 5px rgba(0,0,0,0.1);
+}
+.ImputText:focus {
+  border-color: #6a5acd;
+  box-shadow: 0 0 5px #6a5acd;
+  outline: none;
 }
 
 /* Contenedor de la lista de targets */
 .TargetsContainer{
   position: absolute;
-  top: 100px;
-  left: 17px;
-  width: 320px;
-  height: 220px; /* altura fija para área de scroll */
+  top: 87px;
+  left: 8px;
+  width: 330px;
+  height: 240px; /* altura fija para área de scroll */
   display: flex;
   flex-direction: column;
   gap: 5px;
- border: 2px solid rgb(128, 124, 124);
- background-color: rgb(255, 255, 255);
+ background-color: transparent;
+  overflow-y: auto; /* habilita el scroll vertical */
+  padding-right: 10px; /* espacio para evitar que el contenido quede oculto tras la barra de scroll */
 border-radius: 4px;
   overflow: hidden; /* oculta lo que esté fuera */
   cursor: pointer;
+
 }
 
 .Content{
   position: relative;
   width: 100%;
   height: 50px;
-  border: 2px solid rgb(128, 124, 124);
 
 }
-
-.Targert{
-  position: absolute;
- width: 100%;
- height: 100%;
-
-}
-
 .CardPhoto{
   position: absolute;
   width: 80px;
@@ -109,8 +110,9 @@ border-radius: 4px;
   left: 260px;
   margin: 0;
   font-size: 12px;
-  top: 50px;
+  top: 42px;
   font-weight: bold;
+
 }
 .T{
   position: absolute;
@@ -119,30 +121,53 @@ border-radius: 4px;
   left: 60px;
   margin: 0;
   font-size: 12px;
-  top: 50px;
+  top: 42px;
   font-weight: bold;
 }
 
 .Type {
   position: absolute;
   left: 37px;
-  top: 70px;
+  top: 60px;
   width: 80px;
   height: 22px;
+ border: 2px solid #aaa;
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: #fff;
   font-size: 12px;
-  text-transform: capitalize;
+  cursor: pointer;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
   text-align: center;
-  border-radius: 4px;
-  display: flex;
 }
 .Generation {
   position: absolute;
   left: 250px;
-  top: 70px;
+  top: 60px;
   width: 80px;
   height: 22px;
+  border: 2px solid #aaa;
+  border-radius: 6px;
+  padding: 2px 6px;
+  background: #fff;
   font-size: 12px;
-  border-radius: 4px;
-  display: flex;
+  cursor: pointer;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
   text-align: center;
+}
+.DisplayCard {
+  position: relative;
+  height: 30px;
+  top: 6px;
+  left: 5px;
+  border-radius: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+   border: 2px solid white;
+  outline: 2px solid rgb(102, 98, 98);
+  outline-offset: 2px;
 }
