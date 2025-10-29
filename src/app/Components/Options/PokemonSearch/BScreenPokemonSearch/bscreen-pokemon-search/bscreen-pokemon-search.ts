@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,HostListener,OnInit } from '@angular/core';
+import { Component,HostListener,OnInit,OnDestroy } from '@angular/core';
 import { PokemonSelected } from '../../../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
 import { PokemonDetailService,PokemonFullData } from '../../../../../Services/Pokemons/PokemonDetailService/pokemon-detail-service';
 
@@ -10,32 +10,42 @@ import { PokemonDetailService,PokemonFullData } from '../../../../../Services/Po
   templateUrl: './bscreen-pokemon-search.html',
   styleUrls: ['./bscreen-pokemon-search.scss']
 })
-export class BScreenPokemonSearch implements OnInit {
+export class BScreenPokemonSearch implements OnInit, OnDestroy {
   Ison = true;
-pokemonData: PokemonFullData | null = null;
+  pokemonData: PokemonFullData | null = null;
   get selectedPokemon$() { return this.pokemonSelected.selectedPokemon$; }
 
-  totalPages = 3; // cantidad de páginas visibles
-
+  totalPages = 3;
+  currentPage = 0;
 
   constructor(private pokemonSelected: PokemonSelected, private detailService: PokemonDetailService) {}
 
   ngOnInit() {
-     this.pokemonSelected.selectedPokemon$.subscribe(pokemon => {
+    // Resetear al entrar
+    this.resetState();
+
+    this.pokemonSelected.selectedPokemon$.subscribe(pokemon => {
       if (pokemon) {
-        // Pedimos datos completos solo del Pokémon seleccionado
         this.detailService.getPokemonFullData(pokemon.name).subscribe(data => {
           this.pokemonData = data;
         });
       } else {
-        this.pokemonData = null; // no hay Pokémon seleccionado
+        this.pokemonData = null;
       }
     });
   }
 
-  currentPage = 0;
+  ngOnDestroy() {
+    // Limpiar al salir de la opción
+    this.resetState();
+  }
 
- setPage(index: number) {
+  private resetState() {
+    this.pokemonData = null;
+    this.currentPage = 0;
+  }
+
+  setPage(index: number) {
     this.currentPage = index;
   }
 
@@ -83,8 +93,5 @@ getPokemonColor(types: string[]): string {
   const color2 = this.PokemonTypeColors[types[1]] || '#eee';
   return `linear-gradient(135deg, ${color1}, ${color2})`;
 }
-
-
-
 
 }

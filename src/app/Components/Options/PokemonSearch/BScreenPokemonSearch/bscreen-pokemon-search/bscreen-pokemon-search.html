@@ -1,5 +1,5 @@
 <!-- 🔘 Dots para cambiar de página -->
-<div class="Dots">
+<div class="Dots" *ngIf="Ison && pokemonData">
   <span
     *ngFor="let dot of [0, 1, 2]; let i = index"
     (click)="setPage(i)"
@@ -8,10 +8,10 @@
 </div>
 
 <!-- Pantalla principal -->
-<div *ngIf="Ison && pokemonData as p" class="Screen" [style.background]="getPokemonColor(p.types)">
+<div *ngIf="Ison" class="Screen" [style.background]="pokemonData ? getPokemonColor(pokemonData.types) : '#2a2a2a'">
 
   <!-- Si hay Pokémon seleccionado -->
-  <ng-container *ngIf="p; else empty">
+  <ng-container *ngIf="pokemonData as p; else empty">
 
     <!-- Contenedor de páginas -->
     <div
