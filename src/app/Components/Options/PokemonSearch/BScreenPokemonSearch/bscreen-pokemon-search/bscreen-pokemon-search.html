@@ -70,18 +70,20 @@
       </div>
 
       <!-- 🟦 Página 3: Evoluciones -->
-      <div class="Page">
-        <h2 class="Title3">Evolutions</h2>
-
-        <div class="Evolutions">
-          <div
-            *ngFor="let evo of p.evolution"
-            class="EvolutionItem"
-          >
-            <p>{{ evo.name | titlecase }}</p>
-          </div>
-        </div>
-      </div>
+     <div class="Page">
+  <h2 class="Title3">Evolutions</h2>
+  <div class="Evolutions">
+    <div *ngFor="let evo of p.evolution" class="EvolutionItem">
+      <img
+        *ngIf="evo.image"
+        [src]="evo.image"
+        [alt]="evo.name"
+        class="EvolutionImage"
+      />
+      <p class="EvoName">{{ evo.name | titlecase }}</p>
+    </div>
+  </div>
+</div>
     </div>
   </ng-container>
 

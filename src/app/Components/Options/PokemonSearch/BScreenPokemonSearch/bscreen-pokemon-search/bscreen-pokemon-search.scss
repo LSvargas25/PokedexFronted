@@ -38,14 +38,16 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #ffffff;
+  background: #fcf8f8;
   border: 1px solid #5555556b;
   cursor: pointer;
   transition: all 0.3s ease;
+
+
 }
 
 .Dots span.active {
-  background: #615959;
+  background: #d85353;
   transform: scale(1.4);
 }
 
@@ -65,7 +67,7 @@
 .PhotoFrame {
   position: absolute;
   top: 5px;
-  left: 170px;
+  left: 200px;
   width: 220px;
   height: 220px;
   display: flex;
@@ -135,7 +137,7 @@
   position: absolute;
   width: 350px;
   height: 140px;
-  left: 80px;
+  left: 140px;
   top: 240px;
   border-radius: 20px;
    font-size: 10px;
@@ -293,8 +295,6 @@ justify-items: center;
   font-size: 12px;
   color: #ff0000; /* Hidden en rojo */
 }
-
-
 /* Foto secundaria estilo cristal */
 .Photo {
   position: relative;
@@ -311,5 +311,41 @@ justify-items: center;
   box-shadow: 0 0 15px rgba(42,117,187,0.7), inset 0 0 10px rgba(255,255,255,0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+/* Page#3 */
 
-
+.Evolutions{
+  position: relative;
+  top: -80px;
+  left: 5px;
+  width: 360px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: white 2px solid;
+  border-radius: 16px;
+  gap: 20px;
+}
+.EvoName{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  color: #000;
+  text-shadow: 2px 2px 3px #ffffff;
+  justify-items: center;
+  align-items: center;
+  margin-top: 8px;
+}
+.EvolutionItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.EvolutionImage{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(0,0,0,0.1));
+  box-shadow: 0 0 15px rgba(42,117,187,0.7), inset 0 0 10px rgba(255,255,255,0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
