@@ -3,6 +3,7 @@
   <span
     *ngFor="let dot of [0, 1, 2]; let i = index"
     (click)="setPage(i)"
+    (mouseover)="setPage(i)"
     [class.active]="i === currentPage"
   ></span>
 </div>
