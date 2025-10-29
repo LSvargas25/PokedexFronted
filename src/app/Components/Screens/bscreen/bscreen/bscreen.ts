@@ -12,7 +12,7 @@ import { BScreenPokemonSearch } from '../../../Options/PokemonSearch/BScreenPoke
   templateUrl: './bscreen.html',
   styleUrls: ['./bscreen.scss'],
   standalone: true,
-  imports: [BScreenPoked,CommonModule,BScreenPoked,BScreenTrainer,BScreenPokemonSearch]
+  imports: [CommonModule, BScreenPoked, BScreenTrainer, BScreenPokemonSearch]
 })
 export class Bscreen implements AfterViewInit {
   @ViewChild('videoPlayer', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;

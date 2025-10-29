@@ -1,6 +1,14 @@
 <div class="Screen" *ngIf="AScreen" >
   <div class="border"></div>
 
+  <!-- Estado de carga / error -->
+  <div *ngIf="loading" style="position:absolute; top:8px; left:8px; background:#fff; padding:4px 8px; border-radius:6px; border:1px solid #ccc; z-index:2;">
+    Loading...
+  </div>
+  <div *ngIf="error" style="position:absolute; top:8px; right:8px; background:#ffefef; padding:4px 8px; border-radius:6px; border:1px solid #ffb4b4; color:#a00; z-index:2;">
+    {{ error }}
+  </div>
+
   <div *ngIf="FilterBy" class="Filter">
 
     <p class="G">Generation:</p>

@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { PokedService } from './poked-screen-state';
 
-import { PokedScreenState } from './poked-screen-state';
-
-describe('PokedScreenState', () => {
-  let service: PokedScreenState;
+describe('PokedService', () => {
+  let service: PokedService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PokedScreenState);
+    service = TestBed.inject(PokedService);
   });
 
   it('should be created', () => {
