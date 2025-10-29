@@ -167,7 +167,24 @@ border-radius: 4px;
   display: flex;
   align-items: center;
   padding: 4px 8px;
-   border: 2px solid white;
+  border: 2px solid white;
   outline: 2px solid rgb(102, 98, 98);
   outline-offset: 2px;
+
+  &:hover {
+    transform: scale(1.05); // Scale up on hover
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  &.selected {
+    border: 2px solid red; // Red border for selected Pokémon
+    outline: 2px solid black; // Black outline for selected Pokémon
+  }
+}
+
+.PokeballIcon {
+  position: absolute;
+  left: -20px; // Adjust position as needed
+  width: 20px; // Adjust size as needed
+  height: 20px; // Adjust size as needed
 }

@@ -47,16 +47,19 @@
        (mousemove)="onMouseMove($event, targetsDiv)"
        (mouseleave)="onMouseLeave()"
        #targetsDiv>
-    <div *ngFor="let p of displayedPokemons" class="DisplayCard"
-       [ngStyle]="{'background': getPokemonColor(p.types)}"
+    <div *ngFor="let p of displayedPokemons"
+         class="DisplayCard"
+         [ngClass]="{'selected': p === pokemonSelected.getSelected()}"
+         [ngStyle]="{'background': getPokemonColor(p.types)}"
          (click)="onSelectPokemon(p)"
-      style="cursor: pointer;">
+         style="cursor: pointer;">
       <div class="Content">
         <div class="CardPhoto">
           <img [src]="p.image" [alt]="p.name" />
         </div>
         <p class="CardID">#{{p.id}}</p>
         <h2 class="CardName">{{p.name}}</h2>
+        <img *ngIf="p === pokemonSelected.getSelected()" src="assets/pokeball.ico" class="PokeballIcon" />
       </div>
     </div>
   </div>

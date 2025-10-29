@@ -39,10 +39,14 @@ export class AScreenPokemonSearch implements OnInit {
 
   private scrollInterval: any;
 
+  public pokemonSelected: PokemonSelected; // Ensure this is properly initialized in the constructor
+
   constructor(
     private pokemonService: PokemonService,
-    private pokemonSelected: PokemonSelected
-  ) {}
+    pokemonSelected: PokemonSelected // Injecting the service
+  ) {
+    this.pokemonSelected = pokemonSelected; // Assigning it to the class property
+  }
 
   ngOnInit(): void {
     this.loadPokemons();
@@ -142,17 +146,21 @@ getPokemonColor(types: string[]): string {
   }
 
   scrollUp(): void {
-    if (this.currentIndex > 0) {
+    if (this.currentIndex === 0) {
+      this.currentIndex = this.filteredPokemons.length - 10; // Wrap around to the last set
+    } else {
       this.currentIndex--;
-      this.updateDisplayed();
     }
+    this.updateDisplayed();
   }
 
   scrollDown(): void {
-    if (this.currentIndex < Math.max(0, this.filteredPokemons.length - 10)) {
+    if (this.currentIndex >= this.filteredPokemons.length - 10) {
+      this.currentIndex = 0; // Wrap around to the first set
+    } else {
       this.currentIndex++;
-      this.updateDisplayed();
     }
+    this.updateDisplayed();
   }
 
   @HostListener('window:keydown', ['$event'])
