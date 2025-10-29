@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Type } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Type, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import gsap from 'gsap';
@@ -9,6 +9,8 @@ import { AScreenPokemonSearch } from '../../Options/PokemonSearch/AScreenPokemon
 import { ScreenTrainerInfo } from '../../Options/TrainerInfo/AScreenTrainer/screen-trainer-info/screen-trainer-info';
 import { Settings } from '../../Options/Settings/Settings/settings';
 import { PokemonSelected } from '../../../Services/Options/SearchPokemon/PokemonSelected/pokemon-selected';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-ascreen',
   standalone: true,
@@ -16,8 +18,7 @@ import { PokemonSelected } from '../../../Services/Options/SearchPokemon/Pokemon
   templateUrl: './ascreen.html',
   styleUrls: ['./ascreen.scss']
 })
-export class AScreen implements AfterViewInit {
-
+export class AScreen implements AfterViewInit, OnDestroy {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
   @ViewChild('blackSplit') blackSplit!: ElementRef<HTMLDivElement>;
 
@@ -33,30 +34,46 @@ export class AScreen implements AfterViewInit {
   isMuted = false;
   volumeIcon = '🔉';
 
+  private destroy$ = new Subject<void>();
+  forceSilence = false; // audio solo en menú (si el usuario no está muteado)
+
   constructor(
     private screenService: ScreenService,
     private pokedService: PokedService,
     private pokemonSelected: PokemonSelected // inyectar el servicio
   ) {
-    // Escucha estado de la pantalla (encendido/apagado)
-    this.screenService.screenState$.subscribe(state => {
-      if (state && !this.isOn) this.startScreen();
-      else if (!state && this.isOn) this.stopScreen();
-      this.isOn = state;
-    });
+    this.screenService.screenState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => {
+        if (state && !this.isOn) this.startScreen();
+        else if (!state && this.isOn) this.stopScreen();
+        this.isOn = state;
+      });
 
-    this.screenService.reset$.subscribe(() => this.resetScreenState());
+    this.screenService.reset$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.resetScreenState());
 
-    // Escucha contenido de AScreen desde el servicio
-    this.pokedService.state$.subscribe(data => {
-      if (data.aScreenContent) this.loadAScreenContent(data.aScreenContent);
-      else this.clearAScreenContent();
-    });
+    this.pokedService.state$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        if (data.aScreenContent) this.loadAScreenContent(data.aScreenContent);
+        else this.clearAScreenContent();
+      });
   }
 
   ngAfterViewInit() {
-    if (this.videoPlayer) this.videoPlayer.nativeElement.volume = this.volume;
+    if (this.videoPlayer) {
+      this.videoPlayer.nativeElement.volume = this.volume;
+      this.videoPlayer.nativeElement.muted = this.isMuted;
+    }
     this.updateVolumeIcon();
+  }
+
+  ngOnDestroy() {
+    this.stopAllVideos();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**Animación de encendido (abrir la cortina) */
@@ -89,6 +106,9 @@ export class AScreen implements AfterViewInit {
     this.currentComponent = null;
     this.currentVideo = '';
     this.pokemonSelected.reset(); // Resetear pokemon seleccionado
+
+    this.stopAllVideos(); // <- asegura que nada quede sonando
+
     const splitEl = this.blackSplit.nativeElement;
     const top = splitEl.querySelector('.black-top') as HTMLElement;
     const bottom = splitEl.querySelector('.black-bottom') as HTMLElement;
@@ -120,8 +140,29 @@ export class AScreen implements AfterViewInit {
     if (!video) return;
     video.currentTime = 0;
     video.volume = this.volume;
-    video.muted = this.isMuted;
+    video.muted = this.isMuted || this.forceSilence; // usar silencio efectivo
     video.play();
+    this.applyVolumeToAllVideos();
+  }
+
+  private stopAllVideos() {
+    document.querySelectorAll('video').forEach(v => {
+      try {
+        v.pause();
+        v.currentTime = 0;
+      } catch {}
+    });
+  }
+
+  private applyVolumeToAllVideos() {
+    const vol = this.isMuted ? 0 : this.volume;
+    const muted = this.isMuted || this.forceSilence || vol === 0;
+    document.querySelectorAll('video').forEach(v => {
+      try {
+        v.muted = muted;
+        v.volume = muted ? 0 : vol;
+      } catch {}
+    });
   }
 
   private resetScreenState() {
@@ -147,6 +188,7 @@ export class AScreen implements AfterViewInit {
   onVideoEnded() {
     if (!this.showMenu) {
       this.showMenu = true;
+      this.forceSilence = false; // al mostrar menú, permitir sonido si no está muteado
       this.currentVideo = 'assets/videos/pikachu.mp4';
       setTimeout(() => this.playVideo(), 0);
     }
@@ -180,7 +222,14 @@ export class AScreen implements AfterViewInit {
   onOptionClick(option: string) {
     this.showMenu = false;
     this.showBack = true;
-    this.showBackDiv =true;
+    this.showBackDiv = true;
+
+    this.stopAllVideos();
+
+    // silenciar todo fuera del menú sin modificar el mute del usuario
+    this.forceSilence = true;
+    this.applyVolumeToAllVideos();
+
     const video = this.videoPlayer?.nativeElement;
     if (video) {
       video.pause();
@@ -191,7 +240,7 @@ export class AScreen implements AfterViewInit {
     switch(option) {
       case 'Poked':
         this.currentComponent = AscreenPoked;
-        this.pokedService.setScreens('Poked', 'BScreenPoked'); // sincroniza con B
+        this.pokedService.setScreens('Poked', 'BScreenPoked');
         break;
       case 'Pokémon Search':
         this.currentComponent = AScreenPokemonSearch;
@@ -210,35 +259,41 @@ export class AScreen implements AfterViewInit {
 
   goBack() {
     this.pokedService.reset();
-    this.pokemonSelected.reset(); // Resetear pokemon seleccionado
+    this.pokemonSelected.reset();
     this.currentComponent = null;
     this.showBack = false;
-    this.showBackDiv =false;
+    this.showBackDiv = false;
+
+    this.forceSilence = false; // al volver al menú, permitir sonido si no está muteado
     this.showMenu = true;
     this.currentVideo = 'assets/videos/pikachu.mp4';
     setTimeout(() => this.playVideo(), 0);
   }
 
   toggleMute() {
-    const video = this.videoPlayer.nativeElement;
+    const video = this.videoPlayer?.nativeElement;
     if (this.isMuted || this.volume === 0) {
       this.isMuted = false;
       this.volume = 0.3;
-      video.muted = false;
-      video.volume = this.volume;
+      if (video) {
+        video.muted = false;
+        video.volume = this.volume;
+      }
     } else {
       this.isMuted = true;
       this.volume = 0;
-      video.muted = true;
+      if (video) video.muted = true;
     }
+    this.applyVolumeToAllVideos(); // <- aplica a cualquier <video> activo
     this.updateVolumeIcon(true);
   }
 
   changeVolume() {
-    const video = this.videoPlayer.nativeElement;
-    video.volume = this.volume;
+    const video = this.videoPlayer?.nativeElement;
+    if (video) video.volume = this.volume;
     this.isMuted = this.volume === 0;
-    video.muted = this.isMuted;
+    if (video) video.muted = this.isMuted;
+    this.applyVolumeToAllVideos(); // <- aplica a cualquier <video> activo
     this.updateVolumeIcon(true);
   }
 

@@ -35,6 +35,7 @@
       [loop]="showMenu"
       [class.intro]="!showMenu"
       [class.menu]="showMenu"
+      [muted]="isMuted"
       (ended)="onVideoEnded()"
       disablepictureinpicture>
     </video>
