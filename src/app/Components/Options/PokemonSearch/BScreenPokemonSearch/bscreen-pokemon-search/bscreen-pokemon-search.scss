@@ -11,8 +11,8 @@
   font-family: 'Press Start 2P', cursive;
   font-weight: bold;
   overflow: hidden;
-  background: linear-gradient(145deg, #f3f3f3, #e0e0e0);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255,255,255,0.2);
+
 }
 
 /* Contenedor de páginas */
@@ -66,6 +66,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
 }
 
 /* Contenedor interno Page 1 */
@@ -433,4 +434,20 @@ justify-items: center;
       inset 0 0 15px rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
   }
+}
+.EmptyState{
+  font-family: 'Press Start 2P', cursive;
+  font-size: 20px;
+  color: #504f4f;
+  text-shadow: 2px 2px 3px #b1b13f;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
